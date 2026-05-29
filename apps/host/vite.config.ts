@@ -7,7 +7,8 @@ export default defineConfig({
     react(),
     federation({
       name: "host",
-
+      dts: false,
+      
       remotes: {
         catalog: {
           type: "module",
@@ -21,6 +22,12 @@ export default defineConfig({
           entry: "http://localhost:3002/remoteEntry.js",
           shareScope: "default",
         },
+        cart: {
+          type: "module",
+          name: "cart",
+          entry: "http://localhost:3003/remoteEntry.js",
+          shareScope: "default",
+        }
       },
 
       shared: {

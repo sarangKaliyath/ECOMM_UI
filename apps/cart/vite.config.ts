@@ -8,7 +8,8 @@ export default defineConfig({
     federation({
       name: "cart",
       filename: "remoteEntry.js",
-
+      dts: false,
+      
       exposes: {
         "./CartApp": "./src/App.tsx",
       },

@@ -3,10 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "private": true,
   "scripts": {
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --parallel",
     "build": "turbo run build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "preview": "turbo run preview --parallel"
   },
   "keywords": [],
   "author": "",
