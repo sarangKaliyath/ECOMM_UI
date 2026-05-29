@@ -16,13 +16,19 @@ export default defineConfig({
       shared: {
         react: {
           singleton: true,
+          requiredVersion: "^18.0.0",
         },
         "react-dom": {
           singleton: true,
+          requiredVersion: "^18.0.0",
         },
       },
     }),
   ],
+
+  build: {
+    target: "esnext",
+  },
 
   server: {
     port: 3003,
