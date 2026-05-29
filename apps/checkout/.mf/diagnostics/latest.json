@@ -1,0 +1,10 @@
+{
+  "latestErrorEvent": {
+    "code": "TYPE-001",
+    "message": "Failed to generate type declaration. Execute the below cmd to reproduce and fix the error. #TYPE-001\nargs: {\"cmd\":\"npx tsc --project C:\\\\Users\\\\sakha\\\\OneDrive\\\\Desktop\\\\EcomFE\\\\ECOMM_MICRO_FE\\\\apps\\\\checkout\\\\node_modules\\\\.federation\\\\tsconfig.a79de2a53f853cdc4f7a621c4de71259.json\"}\nView the docs to see how to solve: https://module-federation.io/guide/troubleshooting/type#type-001",
+    "args": {
+      "cmd": "npx tsc --project C:\\Users\\sakha\\OneDrive\\Desktop\\EcomFE\\ECOMM_MICRO_FE\\apps\\checkout\\node_modules\\.federation\\tsconfig.a79de2a53f853cdc4f7a621c4de71259.json"
+    },
+    "timestamp": 1779883335288
+  }
+}
