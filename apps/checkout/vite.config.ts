@@ -9,9 +9,9 @@ export default defineConfig({
       name: "checkout",
       filename: "remoteEntry.js",
       dts: false,
-      
+
       exposes: {
-        "./CheckoutApp": "./src/App.tsx",
+        "./CheckoutApp": "./src/bootstrap.tsx",
       },
 
       shared: {

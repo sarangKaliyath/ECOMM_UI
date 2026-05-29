@@ -9,9 +9,9 @@ export default defineConfig({
       name: "cart",
       filename: "remoteEntry.js",
       dts: false,
-      
+
       exposes: {
-        "./CartApp": "./src/App.tsx",
+        "./CartApp": "./src/bootstrap.tsx",
       },
 
       shared: {

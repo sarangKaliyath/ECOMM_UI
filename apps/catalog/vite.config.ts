@@ -9,9 +9,9 @@ export default defineConfig({
       name: "catalog",
       filename: "remoteEntry.js",
       dts: false,
-      
+
       exposes: {
-        "./CatalogApp": "./src/App.tsx",
+        "./CatalogApp": "./src/bootstrap.tsx",
       },
 
       shared: {
