@@ -1,6 +1,7 @@
 import "./App.css";
 
 import React, { Suspense } from "react";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 const CatalogApp = React.lazy(() => import("catalog/CatalogApp"));
 
@@ -16,15 +17,21 @@ function App() {
       </div>
 
       <div className="flex flex-col flex-1 overflow-auto">
-        <Suspense fallback={<div>Loading Catalog...</div>}>
-          <CatalogApp />
-        </Suspense>
-        {/* <Suspense fallback={<div>Loading Checkout...</div>}>
-          <CheckoutApp />
-        </Suspense> */}
-        {/* <Suspense fallback={<div>Loading Checkout...</div>}>
-          <CartApp />
-        </Suspense> */}
+        <ErrorBoundary name="Catalog">
+          <Suspense fallback={<div>Loading Catalog...</div>}>
+            <CatalogApp />
+          </Suspense>
+        </ErrorBoundary>
+        {/* <ErrorBoundary name="Checkout">
+          <Suspense fallback={<div>Loading Checkout...</div>}>
+            <CheckoutApp />
+          </Suspense>
+        </ErrorBoundary> */}
+        {/* <ErrorBoundary name="Cart">
+          <Suspense fallback={<div>Loading Cart...</div>}>
+            <CartApp />
+          </Suspense>
+        </ErrorBoundary> */}
       </div>
     </div>
   );
