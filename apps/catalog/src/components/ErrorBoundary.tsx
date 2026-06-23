@@ -29,7 +29,7 @@ class ErrorBoundary extends Component<Props, State> {
       if (this.props.fallback) return this.props.fallback;
 
       return (
-        <div className="flex flex-col items-center justify-center p-8 bg-red-50 border border-red-200 rounded-lg m-4">
+        <div className="flex flex-col items-center justify-center h-full p-8 bg-red-50 border border-red-200 rounded-lg m-4">
           <h2 className="text-xl font-semibold text-red-700 mb-2">
             {this.props.name ? `${this.props.name} failed to load` : "Something went wrong"}
           </h2>
