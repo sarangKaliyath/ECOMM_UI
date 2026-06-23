@@ -6,7 +6,7 @@ const Card = ({ name, price, imageUrl }: CardType) => {
     imageUrl?.includes("example") || !imageUrl ? productAlt : imageUrl;
 
   return (
-    <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full border border-gray-100">
+    <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full border border-gray-100 min-w-[200px]">
       <div className="h-64 bg-gray-100 overflow-hidden">
         <img
           src={image}
