@@ -7,16 +7,21 @@ import {
   LogOut,
   ChevronDown,
   UserCircle,
+  Search,
 } from "lucide-react";
 
 const Navbar = () => {
   const [profileOpen, setProfileOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
         setProfileOpen(false);
       }
     };
@@ -27,108 +32,151 @@ const Navbar = () => {
   const cartCount = 0;
 
   return (
-    <header className="bg-black px-6 py-4 text-white flex items-center justify-between shrink-0">
-      <h1 className="text-2xl font-bold tracking-tight">ShopEase</h1>
+    <header className="bg-gray-100 border-b border-gray-300 shrink-0">
+      <div className="relative px-6 py-4 flex items-center">
+        <h1 className="text-2xl font-bold tracking-tight shrink-0 text-gray-900">ShopEase</h1>
 
-      <div className="flex items-center gap-3">
-        {/* Cart Button */}
-        <button className="relative flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 transition-all text-sm font-medium cursor-pointer">
-          <ShoppingCart size={18} />
-          <span className="hidden sm:inline">Cart</span>
-          {cartCount > 0 && (
-            <span className="absolute -top-1.5 -right-1.5 bg-blue-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold leading-none">
-              {cartCount}
-            </span>
-          )}
-        </button>
-
-        {/* Profile Dropdown */}
-        <div className="relative" ref={dropdownRef}>
-          <button
-            onClick={() => setProfileOpen((o) => !o)}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 transition-all text-sm font-medium cursor-pointer"
-          >
-            <User size={18} />
-            <span className="hidden sm:inline">Account</span>
-            <ChevronDown
-              size={14}
-              className={`transition-transform duration-200 ${profileOpen ? "rotate-180" : ""}`}
+        {/* Desktop search bar — absolutely centered in the navbar */}
+        <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 w-full max-w-sm lg:max-w-md xl:max-w-lg">
+          <div className="relative w-full">
+            <Search
+              size={15}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
             />
+            <input
+              type="text"
+              placeholder="Search products..."
+              className="w-full pl-9 pr-4 py-1.5 rounded-xl bg-white border border-gray-200 text-sm text-gray-900 placeholder-gray-400 outline-none focus:bg-gray-50 transition-all"
+            />
+          </div>
+        </div>
+
+        <div className="flex items-center gap-3 ml-auto">
+          {/* Mobile search toggle */}
+          <button
+            onClick={() => setSearchOpen((o) => !o)}
+            className="md:hidden flex items-center px-3 py-1.5 rounded-xl bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 transition-all cursor-pointer"
+          >
+            <Search size={18} />
           </button>
 
-          {profileOpen && (
-            <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50">
-              {isLoggedIn ? (
-                <>
-                  <div className="px-4 py-3 border-b border-gray-100">
-                    <p className="text-xs text-gray-400">Signed in as</p>
-                    <p className="text-sm font-semibold text-gray-800 truncate">
-                      user@example.com
-                    </p>
-                  </div>
+          {/* Cart Button */}
+          <button className="relative flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 transition-all text-sm font-medium cursor-pointer">
+            <ShoppingCart size={18} />
+            <span className="hidden sm:inline">Cart</span>
+            {cartCount > 0 && (
+              <span className="absolute -top-1.5 -right-1.5 bg-blue-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold leading-none">
+                {cartCount}
+              </span>
+            )}
+          </button>
 
-                  <button
-                    onClick={() => setProfileOpen(false)}
-                    className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
-                  >
-                    <UserCircle size={16} className="text-blue-600" />
-                    My Profile
-                  </button>
+          {/* Profile Dropdown */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setProfileOpen((o) => !o)}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 transition-all text-sm font-medium cursor-pointer"
+            >
+              <User size={18} />
+              <span className="hidden sm:inline">Account</span>
+              <ChevronDown
+                size={14}
+                className={`transition-transform duration-200 ${profileOpen ? "rotate-180" : ""}`}
+              />
+            </button>
 
-                  <button
-                    onClick={() => setProfileOpen(false)}
-                    className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
-                  >
-                    <Settings size={16} className="text-blue-600" />
-                    Account Settings
-                  </button>
+            {profileOpen && (
+              <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50">
+                {isLoggedIn ? (
+                  <>
+                    <div className="px-4 py-3 border-b border-gray-100">
+                      <p className="text-xs text-gray-400">Signed in as</p>
+                      <p className="text-sm font-semibold text-gray-800 truncate">
+                        user@example.com
+                      </p>
+                    </div>
 
-                  <div className="border-t border-gray-100">
+                    <button
+                      onClick={() => setProfileOpen(false)}
+                      className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
+                    >
+                      <UserCircle size={16} className="text-blue-600" />
+                      My Profile
+                    </button>
+
+                    <button
+                      onClick={() => setProfileOpen(false)}
+                      className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
+                    >
+                      <Settings size={16} className="text-blue-600" />
+                      Account Settings
+                    </button>
+
+                    <div className="border-t border-gray-100">
+                      <button
+                        onClick={() => {
+                          setIsLoggedIn(false);
+                          setProfileOpen(false);
+                        }}
+                        className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                      >
+                        <LogOut size={16} />
+                        Sign Out
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="px-4 py-3 border-b border-gray-100">
+                      <p className="text-xs text-gray-400">Welcome!</p>
+                      <p className="text-sm font-medium text-gray-700">
+                        Sign in to your account
+                      </p>
+                    </div>
+
                     <button
                       onClick={() => {
-                        setIsLoggedIn(false);
+                        setIsLoggedIn(true);
                         setProfileOpen(false);
                       }}
-                      className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                      className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
                     >
-                      <LogOut size={16} />
-                      Sign Out
+                      <LogIn size={16} className="text-blue-600" />
+                      Sign In
                     </button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="px-4 py-3 border-b border-gray-100">
-                    <p className="text-xs text-gray-400">Welcome!</p>
-                    <p className="text-sm font-medium text-gray-700">
-                      Sign in to your account
-                    </p>
-                  </div>
 
-                  <button
-                    onClick={() => {
-                      setIsLoggedIn(true);
-                      setProfileOpen(false);
-                    }}
-                    className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
-                  >
-                    <LogIn size={16} className="text-blue-600" />
-                    Sign In
-                  </button>
-
-                  <button
-                    onClick={() => setProfileOpen(false)}
-                    className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
-                  >
-                    <UserCircle size={16} className="text-blue-600" />
-                    Create Account
-                  </button>
-                </>
-              )}
-            </div>
-          )}
+                    <button
+                      onClick={() => setProfileOpen(false)}
+                      className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
+                    >
+                      <UserCircle size={16} className="text-blue-600" />
+                      Create Account
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
+
+      {/* Mobile search bar */}
+      {searchOpen && (
+        <div className="md:hidden px-6 pb-4">
+          <div className="relative w-full">
+            <Search
+              size={15}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+            />
+            <input
+              type="text"
+              placeholder="Search products..."
+              autoFocus
+              className="w-full pl-9 pr-4 py-2 rounded-xl bg-white border border-gray-200 text-sm text-gray-900 placeholder-gray-400 outline-none focus:bg-gray-50 transition-all"
+            />
+          </div>
+        </div>
+      )}
     </header>
   );
 };
