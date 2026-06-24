@@ -1,5 +1,5 @@
 import "./App.css";
-import { ErrorBoundary } from "./components";
+import { ErrorBoundary } from "@ecomm/ui";
 import { Products, Filters } from "./containers";
 
 function App() {

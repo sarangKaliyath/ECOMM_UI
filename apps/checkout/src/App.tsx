@@ -1,5 +1,5 @@
 import './App.css'
-import ErrorBoundary from "./components/ErrorBoundary";
+import { ErrorBoundary } from "@ecomm/ui";
 
 function App() {
   return (

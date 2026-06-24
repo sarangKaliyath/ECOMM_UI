@@ -1,7 +1,7 @@
 import "./App.css";
 
 import React, { Suspense } from "react";
-import ErrorBoundary from "./components/ErrorBoundary";
+import { ErrorBoundary } from "@ecomm/ui";
 
 const CatalogApp = React.lazy(() => import("catalog/CatalogApp"));
 
