@@ -1,9 +1,12 @@
+import { useState } from "react";
 import type { CardType } from "../../types";
 import productAlt from "../../assets/images/productAlt.jpg";
 import { ShoppingCart } from "lucide-react";
 import { isNewProduct } from "../../utils";
 
 const Card = ({ name, price, imageUrl, createdAt }: CardType) => {
+  const [quantity, setQuantity] = useState(0);
+
   const image =
     imageUrl?.includes("example") || !imageUrl ? productAlt : imageUrl;
 
@@ -43,12 +46,31 @@ const Card = ({ name, price, imageUrl, createdAt }: CardType) => {
 
         <div className="mt-0.5 text-xs text-green-600 font-medium">Save 20%</div>
 
-        <button
-          className="flex items-center justify-center gap-2 w-full py-2 mt-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-all cursor-pointer shadow-md hover:shadow-lg"
-        >
-          <ShoppingCart size={15} />
-          Add to Cart
-        </button>
+        {quantity === 0 ? (
+          <button
+            onClick={() => setQuantity(1)}
+            className="flex items-center justify-center gap-2 w-full py-2 mt-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-all cursor-pointer shadow-md hover:shadow-lg"
+          >
+            <ShoppingCart size={15} />
+            Add to Cart
+          </button>
+        ) : (
+          <div className="flex items-center justify-between w-full mt-3 rounded-xl bg-blue-600 text-white shadow-md overflow-hidden">
+            <button
+              onClick={() => setQuantity((q) => Math.max(0, q - 1))}
+              className="px-4 py-2 text-lg font-bold hover:bg-blue-700 transition-colors cursor-pointer"
+            >
+              −
+            </button>
+            <span className="text-sm font-semibold">{quantity}</span>
+            <button
+              onClick={() => setQuantity((q) => q + 1)}
+              className="px-4 py-2 text-lg font-bold hover:bg-blue-700 transition-colors cursor-pointer"
+            >
+              +
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
