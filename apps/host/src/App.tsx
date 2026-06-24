@@ -2,6 +2,7 @@ import "./App.css";
 
 import React, { Suspense } from "react";
 import { ErrorBoundary } from "@ecomm/ui";
+import { Navbar } from "./components";
 
 const CatalogApp = React.lazy(() => import("catalog/CatalogApp"));
 
@@ -12,9 +13,7 @@ const CatalogApp = React.lazy(() => import("catalog/CatalogApp"));
 function App() {
   return (
     <div className="flex flex-col h-screen bg-gray-100">
-      <div className="bg-black px-6 py-4 text-white">
-        <h1 className="text-3xl font-bold">Host Application</h1>
-      </div>
+      <Navbar />
 
       <div className="flex flex-col flex-1 overflow-auto">
         <ErrorBoundary name="Catalog">
