@@ -10,7 +10,7 @@ const Card = ({ name, price, imageUrl, createdAt }: CardType) => {
   const isNew = isNewProduct(createdAt);
 
   return (
-    <div className="group bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full min-w-[180px]">
+    <div className="group bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full">
       <div className="relative bg-gray-50 h-40 p-3 overflow-hidden">
         <img
           src={image}

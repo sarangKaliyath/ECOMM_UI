@@ -1,10 +1,29 @@
 import { useState } from "react";
-import { SlidersHorizontal, ChevronDown, ChevronUp, RotateCcw } from "lucide-react";
+import {
+  SlidersHorizontal,
+  ChevronDown,
+  ChevronUp,
+  RotateCcw,
+  X,
+} from "lucide-react";
 
-const CATEGORIES = ["Electronics", "Clothing", "Home & Kitchen", "Books", "Sports", "Beauty"];
+const CATEGORIES = [
+  "Electronics",
+  "Clothing",
+  "Home & Kitchen",
+  "Books",
+  "Sports",
+  "Beauty",
+];
 const RATINGS = [4, 3, 2, 1];
 
-const Section = ({ title, children }: { title: string; children: React.ReactNode }) => {
+const Section = ({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) => {
   const [open, setOpen] = useState(true);
   return (
     <div className="border-b border-gray-100 py-4">
@@ -13,21 +32,25 @@ const Section = ({ title, children }: { title: string; children: React.ReactNode
         className="flex items-center justify-between w-full text-sm font-semibold text-gray-700 mb-2 cursor-pointer"
       >
         {title}
-        {open ? <ChevronUp size={15} className="text-gray-400" /> : <ChevronDown size={15} className="text-gray-400" />}
+        {open ? (
+          <ChevronUp size={15} className="text-gray-400" />
+        ) : (
+          <ChevronDown size={15} className="text-gray-400" />
+        )}
       </button>
       {open && <div className="mt-2 space-y-2">{children}</div>}
     </div>
   );
 };
 
-const Filters = () => {
+const Filters = ({ onClose }: { onClose?: () => void }) => {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState(5000);
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
 
   const toggleCategory = (cat: string) =>
     setSelectedCategories((prev) =>
-      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
+      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat],
     );
 
   const reset = () => {
@@ -36,7 +59,10 @@ const Filters = () => {
     setSelectedRating(null);
   };
 
-  const hasFilters = selectedCategories.length > 0 || priceRange < 5000 || selectedRating !== null;
+  const hasFilters =
+    selectedCategories.length > 0 ||
+    priceRange < 5000 ||
+    selectedRating !== null;
 
   return (
     <div className="h-full flex flex-col bg-white overflow-y-auto">
@@ -46,22 +72,36 @@ const Filters = () => {
           <SlidersHorizontal size={16} className="text-blue-600" />
           <span className="font-bold text-gray-800 text-sm">Filters</span>
         </div>
-        {hasFilters && (
-          <button
-            onClick={reset}
-            className="flex items-center gap-1 text-xs text-blue-600 font-medium hover:text-blue-800 transition-colors cursor-pointer"
-          >
-            <RotateCcw size={12} />
-            Reset
-          </button>
-        )}
+        <div className="flex items-center gap-2">
+          {hasFilters && (
+            <button
+              onClick={reset}
+              className="flex items-center gap-1 text-xs text-blue-600 font-medium hover:text-blue-800 transition-colors cursor-pointer"
+            >
+              <RotateCcw size={12} />
+              Reset
+            </button>
+          )}
+          {onClose && (
+            <button
+              onClick={onClose}
+              className="md:hidden text-gray-400 hover:text-gray-700 transition-colors cursor-pointer"
+              aria-label="Close filters"
+            >
+              <X size={18} />
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="px-5 flex-1">
         {/* Categories */}
         <Section title="Category">
           {CATEGORIES.map((cat) => (
-            <label key={cat} className="flex items-center gap-2.5 cursor-pointer group">
+            <label
+              key={cat}
+              className="flex items-center gap-2.5 cursor-pointer group"
+            >
               <input
                 type="checkbox"
                 checked={selectedCategories.includes(cat)}
@@ -126,7 +166,10 @@ const Filters = () => {
         {/* Availability */}
         <Section title="Availability">
           {["In Stock", "New Arrivals", "On Sale"].map((opt) => (
-            <label key={opt} className="flex items-center gap-2.5 cursor-pointer group">
+            <label
+              key={opt}
+              className="flex items-center gap-2.5 cursor-pointer group"
+            >
               <input
                 type="checkbox"
                 className="w-3.5 h-3.5 rounded accent-blue-600 cursor-pointer"
