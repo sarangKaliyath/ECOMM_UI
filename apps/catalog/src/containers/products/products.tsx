@@ -9,17 +9,13 @@ const Products = () => {
   return (
     <div className="h-full flex flex-wrap gap-4 items-center overflow-y-scroll">
       {isPending ? (
-        <div className="h-full flex flex-wrap gap-4 items-center overflow-y-scroll">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 p-2 m-5">
-              <CardSkeleton />
-            </div>
-          ))}
-        </div>
+        Array.from({ length: 6 }).map((_, i) => (
+          <div key={i} className="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 p-2 m-5">
+            <CardSkeleton />
+          </div>
+        ))
       ) : (
-        data?.map((item) => {
-          console.log(item);
-          return (
+        data?.map((item) => (
             <div
               key={item.id}
               className="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 p-2 m-5"
@@ -31,9 +27,8 @@ const Products = () => {
                 createdAt={item?.created_at}
               />
             </div>
-          );
-        })
-      )}
+        )
+      ))}
     </div>
   );
 };
