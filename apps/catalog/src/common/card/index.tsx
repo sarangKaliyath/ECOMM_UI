@@ -1,10 +1,13 @@
 import type { CardType } from "../../types";
 import productAlt from "../../assets/images/productAlt.jpg";
 import { ShoppingCart } from "lucide-react";
+import { isNewProduct } from "../../utils";
 
-const Card = ({ name, price, imageUrl }: CardType) => {
+const Card = ({ name, price, imageUrl, createdAt }: CardType) => {
   const image =
     imageUrl?.includes("example") || !imageUrl ? productAlt : imageUrl;
+
+  const isNew = isNewProduct(createdAt);
 
   return (
     <div className="group bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full min-w-[220px]">
@@ -15,9 +18,11 @@ const Card = ({ name, price, imageUrl }: CardType) => {
           className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-110"
         />
 
-        <span className="absolute top-3 left-3 bg-blue-600 text-white text-xs font-semibold px-2 py-1 rounded-full">
-          New
-        </span>
+        {isNew && (
+          <span className="absolute top-3 left-3 bg-blue-600 text-white text-xs font-semibold px-2 py-1 rounded-full">
+            New
+          </span>
+        )}
       </div>
 
       <div className="flex flex-col flex-1 p-5">

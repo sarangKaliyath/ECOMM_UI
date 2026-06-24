@@ -17,18 +17,22 @@ const Products = () => {
           ))}
         </div>
       ) : (
-        data?.map((item) => (
-          <div
-            key={item.id}
-            className="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 p-2 m-5"
-          >
-            <Card
-              name={item?.name}
-              imageUrl={item?.imageUrl}
-              price={item?.price}
-            />
-          </div>
-        ))
+        data?.map((item) => {
+          console.log(item);
+          return (
+            <div
+              key={item.id}
+              className="w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 p-2 m-5"
+            >
+              <Card
+                name={item?.name}
+                imageUrl={item?.imageUrl}
+                price={item?.price}
+                createdAt={item?.created_at}
+              />
+            </div>
+          );
+        })
       )}
     </div>
   );
