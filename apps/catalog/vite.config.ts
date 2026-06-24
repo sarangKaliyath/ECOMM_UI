@@ -34,6 +34,12 @@ export default defineConfig({
   server: {
     port: 3001,
     origin: "http://localhost:3001",
+    cors: true,
+    hmr: {
+      protocol: "ws",
+      host: "localhost",
+      port: 3001,
+    },
   },
 
   preview: {
