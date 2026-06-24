@@ -5,11 +5,11 @@ import { Products, Filters } from "./containers";
 function App() {
   return (
     <ErrorBoundary name="Catalog">
-      <div className="flex w-full h-screen overflow-hidden bg-blue-100">
-        <div className="w-1/6 border-r-2 border-gray-300">
+      <div className="flex w-full h-screen overflow-hidden bg-gray-50">
+        <div className="w-64 shrink-0 border-r border-gray-200 shadow-sm">
           <Filters />
         </div>
-        <div className="w-5/6">
+        <div className="flex-1 min-w-0">
           <Products />
         </div>
       </div>
