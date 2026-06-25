@@ -8,8 +8,8 @@ export interface Product {
   id: string;
   name: string;
   description: string;
-  price: number;
-  imageUrl: string;
+  defaultPrice: number;
+  primaryImageUrl: string;
   category: Category;
   created_at: string
 }

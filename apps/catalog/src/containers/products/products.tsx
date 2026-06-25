@@ -28,8 +28,8 @@ const Products = () => {
   }, []);
 
   const sorted = [...(data ?? [])].sort((a, b) => {
-    if (sort === "price_asc") return Number(a.price) - Number(b.price);
-    if (sort === "price_desc") return Number(b.price) - Number(a.price);
+    if (sort === "price_asc") return Number(a.defaultPrice) - Number(b.defaultPrice);
+    if (sort === "price_desc") return Number(b.defaultPrice) - Number(a.defaultPrice);
     if (sort === "name_asc") return a.name.localeCompare(b.name);
     if (sort === "newest") {
       return dayjs(b.created_at).valueOf() - dayjs(a.created_at).valueOf();
@@ -109,8 +109,8 @@ const Products = () => {
                   <Card
                     key={item.id}
                     name={item?.name}
-                    imageUrl={item?.imageUrl}
-                    price={item?.price}
+                    primaryImageUrl={item?.primaryImageUrl}
+                    defaultPrice={item?.defaultPrice}
                     createdAt={item?.created_at}
                   />
                 ))}

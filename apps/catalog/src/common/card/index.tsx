@@ -4,11 +4,11 @@ import productAlt from "../../assets/images/productAlt.jpg";
 import { ShoppingCart } from "lucide-react";
 import { isNewProduct } from "../../utils";
 
-const Card = ({ name, price, imageUrl, createdAt }: CardType) => {
+const Card = ({ name, defaultPrice, primaryImageUrl, createdAt }: CardType) => {
   const [quantity, setQuantity] = useState(0);
 
   const image =
-    imageUrl?.includes("example") || !imageUrl ? productAlt : imageUrl;
+    primaryImageUrl?.includes("example") || !primaryImageUrl ? productAlt : primaryImageUrl;
 
   const isNew = isNewProduct(createdAt);
 
@@ -37,10 +37,10 @@ const Card = ({ name, price, imageUrl, createdAt }: CardType) => {
         </h3>
 
         <div className="mt-2 flex items-center gap-2">
-          <span className="text-base font-bold text-gray-900">₹{price}</span>
+          <span className="text-base font-bold text-gray-900">₹{defaultPrice}</span>
 
           <span className="text-xs text-gray-400 line-through">
-            ₹{Math.round(Number(price) * 1.2)}
+            ₹{Math.round(Number(defaultPrice) * 1.2)}
           </span>
         </div>
 
