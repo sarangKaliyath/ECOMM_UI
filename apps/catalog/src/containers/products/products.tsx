@@ -118,6 +118,8 @@ const Products = () => {
                     reviewCount={item?.reviewCount}
                     inventoryStatus={item?.inventoryStatus}
                     category={item?.category}
+                    onSale={item?.onSale}
+                    discountRate={item?.discountRate}
                   />
                 ))}
           </div>

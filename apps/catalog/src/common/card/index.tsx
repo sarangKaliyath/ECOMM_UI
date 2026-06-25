@@ -18,6 +18,8 @@ const Card = ({
   reviewCount,
   inventoryStatus,
   category,
+  onSale,
+  discountRate,
 }: CardType) => {
   const [quantity, setQuantity] = useState(0);
 
@@ -110,10 +112,16 @@ const Card = ({
         {/* Price */}
         <div className="flex items-center gap-2 mt-0.5">
           <span className="text-base font-bold text-gray-900">{formatPrice(defaultPrice, currencyCode)}</span>
-          <span className="text-xs text-gray-400 line-through">
-            {formatPrice(Number(defaultPrice) * 1.2, currencyCode)}
-          </span>
-          <span className="text-xs text-green-600 font-medium">20% off</span>
+          {onSale && discountRate && (
+            <>
+              <span className="text-xs text-gray-400 line-through">
+                {formatPrice(defaultPrice / (1 - discountRate / 100), currencyCode)}
+              </span>
+              <span className="text-xs font-semibold bg-red-100 text-red-600 px-1.5 py-0.5 rounded-full">
+                -{discountRate}%
+              </span>
+            </>
+          )}
         </div>
 
         {/* Cart */}

@@ -9,4 +9,6 @@ export type CardType = {
     reviewCount?: number,
     inventoryStatus?: string,
     category?: { id: string | number; name: string },
+    onSale?: boolean,
+    discountRate?: number,
 }

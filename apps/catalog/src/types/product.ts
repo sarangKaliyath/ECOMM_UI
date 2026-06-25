@@ -19,4 +19,6 @@ export interface Product {
   category: Category;
   createdAt: string;
   created_at: string;
+  onSale?: boolean;
+  discountRate?: number;
 }
