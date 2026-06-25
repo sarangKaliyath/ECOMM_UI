@@ -6,15 +6,8 @@ import {
   RotateCcw,
   X,
 } from "lucide-react";
+import { useCategory } from "../../hooks";
 
-const CATEGORIES = [
-  "Electronics",
-  "Clothing",
-  "Home & Kitchen",
-  "Books",
-  "Sports",
-  "Beauty",
-];
 const RATINGS = [4, 3, 2, 1];
 
 const Section = ({
@@ -44,6 +37,8 @@ const Section = ({
 };
 
 const Filters = ({ onClose }: { onClose?: () => void }) => {
+  const { data } = useCategory();
+
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState(5000);
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
@@ -97,19 +92,19 @@ const Filters = ({ onClose }: { onClose?: () => void }) => {
       <div className="px-5 flex-1">
         {/* Categories */}
         <Section title="Category">
-          {CATEGORIES.map((cat) => (
+          {(data ?? []).map((cat) => (
             <label
-              key={cat}
+              key={cat.id}
               className="flex items-center gap-2.5 cursor-pointer group"
             >
               <input
                 type="checkbox"
-                checked={selectedCategories.includes(cat)}
-                onChange={() => toggleCategory(cat)}
+                checked={selectedCategories.includes(cat.name)}
+                onChange={() => toggleCategory(cat.name)}
                 className="w-3.5 h-3.5 rounded accent-blue-600 cursor-pointer"
               />
               <span className="text-xs text-gray-600 group-hover:text-gray-900 transition-colors">
-                {cat}
+                {cat.name}
               </span>
             </label>
           ))}

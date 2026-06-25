@@ -1,7 +1,7 @@
 // features/products/queries/productQueries.ts
 
 import { queryOptions } from "@tanstack/react-query";
-import { getAllProducts } from "../../api/products.api";
+import { getAllProducts } from "../../api";
 
 import { productKeys } from "./productKeys";
 
