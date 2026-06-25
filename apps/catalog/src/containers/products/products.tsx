@@ -32,7 +32,7 @@ const Products = () => {
     if (sort === "price_desc") return Number(b.defaultPrice) - Number(a.defaultPrice);
     if (sort === "name_asc") return a.name.localeCompare(b.name);
     if (sort === "newest") {
-      return dayjs(b.created_at).valueOf() - dayjs(a.created_at).valueOf();
+      return dayjs(b.createdAt ?? b.created_at).valueOf() - dayjs(a.createdAt ?? a.created_at).valueOf();
     }
     return 0;
   });
@@ -111,7 +111,13 @@ const Products = () => {
                     name={item?.name}
                     primaryImageUrl={item?.primaryImageUrl}
                     defaultPrice={item?.defaultPrice}
-                    createdAt={item?.created_at}
+                    createdAt={item?.createdAt ?? item?.created_at}
+                    currencyCode={item?.currencyCode}
+                    brand={item?.brand}
+                    averageRating={item?.averageRating}
+                    reviewCount={item?.reviewCount}
+                    inventoryStatus={item?.inventoryStatus}
+                    category={item?.category}
                   />
                 ))}
           </div>
