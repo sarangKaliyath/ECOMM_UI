@@ -1,8 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import { Card, CardSkeleton } from "../../common";
 import { useProducts } from "../../hooks";
-import { ArrowUpDown, ChevronDown, PackageSearch } from "lucide-react";
+import { ArrowUpDown, ChevronDown, ChevronLeft, ChevronRight, PackageSearch } from "lucide-react";
 import dayjs from "dayjs";
+
+const PAGE_SIZE = 10;
 
 const SORT_OPTIONS = [
   { label: "Newest First", value: "newest" },
@@ -12,10 +14,12 @@ const SORT_OPTIONS = [
 ];
 
 const Products = () => {
-  const { data, isPending, isError } = useProducts();
+  const [page, setPage] = useState(0);
   const [sort, setSort] = useState("newest");
   const [sortOpen, setSortOpen] = useState(false);
   const sortRef = useRef<HTMLDivElement>(null);
+
+  const { data, isPending, isError } = useProducts(page, PAGE_SIZE);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -27,15 +31,21 @@ const Products = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const sorted = [...(data ?? [])].sort((a, b) => {
+  const sorted = [...(data?.content ?? [])].sort((a, b) => {
     if (sort === "price_asc") return Number(a.defaultPrice) - Number(b.defaultPrice);
     if (sort === "price_desc") return Number(b.defaultPrice) - Number(a.defaultPrice);
     if (sort === "name_asc") return a.name.localeCompare(b.name);
     if (sort === "newest") {
-      return dayjs(b.createdAt ?? b.created_at).valueOf() - dayjs(a.createdAt ?? a.created_at).valueOf();
+      return dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf();
     }
     return 0;
   });
+
+  const handleSortChange = (value: string) => {
+    setSort(value);
+    setPage(0);
+    setSortOpen(false);
+  };
 
   return (
     <div className="h-full flex flex-col bg-gray-50">
@@ -48,7 +58,7 @@ const Products = () => {
             <>
               Showing{" "}
               <span className="font-semibold text-gray-800">
-                {sorted.length}
+                {data?.totalElements ?? 0}
               </span>{" "}
               products
             </>
@@ -73,10 +83,7 @@ const Products = () => {
               {SORT_OPTIONS.map((o) => (
                 <button
                   key={o.value}
-                  onClick={() => {
-                    setSort(o.value);
-                    setSortOpen(false);
-                  }}
+                  onClick={() => handleSortChange(o.value)}
                   className={`flex items-center gap-3 w-full px-4 py-2.5 text-sm text-left transition-colors cursor-pointer ${
                     sort === o.value
                       ? "bg-blue-50 text-blue-600 font-medium"
@@ -102,29 +109,65 @@ const Products = () => {
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {isPending
-              ? Array.from({ length: 10 }).map((_, i) => (
+              ? Array.from({ length: PAGE_SIZE }).map((_, i) => (
                   <CardSkeleton key={i} />
                 ))
               : sorted.map((item) => (
                   <Card
                     key={item.id}
-                    name={item?.name}
-                    primaryImageUrl={item?.primaryImageUrl}
-                    defaultPrice={item?.defaultPrice}
-                    createdAt={item?.createdAt ?? item?.created_at}
-                    currencyCode={item?.currencyCode}
-                    brand={item?.brand}
-                    averageRating={item?.averageRating}
-                    reviewCount={item?.reviewCount}
-                    inventoryStatus={item?.inventoryStatus}
-                    category={item?.category}
-                    onSale={item?.onSale}
-                    discountRate={item?.discountRate}
+                    name={item.name}
+                    primaryImageUrl={item.primaryImageUrl}
+                    defaultPrice={item.defaultPrice}
+                    createdAt={item.createdAt}
+                    currencyCode={item.currencyCode}
+                    brand={item.brand}
+                    averageRating={item.averageRating}
+                    reviewCount={item.reviewCount}
+                    inventoryStatus={item.inventoryStatus}
+                    category={item.category}
+                    onSale={item.onSale}
+                    discountRate={item.discountRate}
                   />
                 ))}
           </div>
         )}
       </div>
+
+      {/* Pagination */}
+      {!isError && (
+        <div className="px-6 py-3.5 bg-white border-t border-gray-100 flex items-center justify-between shrink-0">
+          <button
+            onClick={() => setPage((p) => p - 1)}
+            disabled={isPending || data?.first}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-100 hover:bg-gray-200 transition-all text-sm font-medium text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+          >
+            <ChevronLeft size={14} />
+            Prev
+          </button>
+
+          <span className="text-sm text-gray-500">
+            {isPending ? (
+              <span className="inline-block h-4 w-20 bg-gray-200 rounded animate-pulse" />
+            ) : (
+              <>
+                Page{" "}
+                <span className="font-semibold text-gray-800">{(data?.number ?? 0) + 1}</span>
+                {" "}of{" "}
+                <span className="font-semibold text-gray-800">{data?.totalPages ?? 1}</span>
+              </>
+            )}
+          </span>
+
+          <button
+            onClick={() => setPage((p) => p + 1)}
+            disabled={isPending || data?.last}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gray-100 hover:bg-gray-200 transition-all text-sm font-medium text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+          >
+            Next
+            <ChevronRight size={14} />
+          </button>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,15 +1,23 @@
 // features/products/queries/productQueries.ts
 
 import { queryOptions } from "@tanstack/react-query";
-import { getAllProducts } from "../../api";
+import { getAllProducts, getProductList } from "../../api";
 
 import { productKeys } from "./productKeys";
 
+const DEFAULT_STALE_TIME = 1000 * 60 * 5;
+
 export const productQueries = {
-  list: () =>
+  all: () =>
     queryOptions({
-      queryKey: productKeys.lists(),
+      queryKey: productKeys.allProducts(),
       queryFn: getAllProducts,
-      staleTime: 1000 * 60 * 5,
+      staleTime: DEFAULT_STALE_TIME,
+    }),
+  paginated: (page: number, size: number) =>
+    queryOptions({
+      queryKey: productKeys.paginated(page, size),
+      queryFn: () => getProductList(page, size),
+      staleTime: DEFAULT_STALE_TIME,
     }),
 };

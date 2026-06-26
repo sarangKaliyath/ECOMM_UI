@@ -18,7 +18,18 @@ export interface Product {
   inventoryStatus: string;
   category: Category;
   createdAt: string;
-  created_at: string;
   onSale?: boolean;
   discountRate?: number;
+}
+
+export interface PaginatedResponse<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  number: number;
+  size: number;
+  first: boolean;
+  last: boolean;
+  numberOfElements: number;
+  empty: boolean;
 }
