@@ -10,7 +10,7 @@ export async function getAllProducts(): Promise<Product[]> {
 export async function getProductList({
   page = 0,
   size = 10,
-  category,
+  category_id,
   min_price,
   max_price,
   rating,
@@ -21,7 +21,7 @@ export async function getProductList({
     params: {
       page,
       size,
-      category,
+      category_id,
       min_price,
       max_price,
       rating,

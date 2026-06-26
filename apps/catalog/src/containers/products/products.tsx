@@ -9,6 +9,7 @@ import {
   PackageSearch,
 } from "lucide-react";
 import dayjs from "dayjs";
+import type { ProductListParams } from "../../types";
 
 const PAGE_SIZE = 10;
 
@@ -19,13 +20,19 @@ const SORT_OPTIONS = [
   { label: "Name: A–Z", value: "name_asc" },
 ];
 
-const Products = () => {
+type FilterParams = Omit<ProductListParams, "page" | "size">;
+
+const Products = ({ filters = {} }: { filters?: FilterParams }) => {
   const [page, setPage] = useState(0);
   const [sort, setSort] = useState("newest");
   const [sortOpen, setSortOpen] = useState(false);
   const sortRef = useRef<HTMLDivElement>(null);
 
-  const { data, isPending, isError } = useProducts({ page, size: PAGE_SIZE});
+  useEffect(() => {
+    setPage(0);
+  }, [filters]);
+
+  const { data, isPending, isError } = useProducts({ page, size: PAGE_SIZE, ...filters });
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {

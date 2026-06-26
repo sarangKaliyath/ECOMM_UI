@@ -3,6 +3,9 @@ import { useState } from "react";
 import { SlidersHorizontal } from "lucide-react";
 import { ErrorBoundary } from "@ecomm/ui";
 import { Products, Filters } from "./containers";
+import type { ProductListParams } from "./types";
+
+type FilterParams = Omit<ProductListParams, "page" | "size">;
 
 function App() {
   const [filtersOpen, setFiltersOpen] = useState(
@@ -10,6 +13,7 @@ function App() {
       typeof window !== "undefined" &&
       window.matchMedia("(min-width: 768px)").matches,
   );
+  const [appliedFilters, setAppliedFilters] = useState<FilterParams>({});
 
   return (
     <ErrorBoundary name="Catalog">
@@ -28,7 +32,7 @@ function App() {
             filtersOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
-          <Filters onClose={() => setFiltersOpen(false)} />
+          <Filters onClose={() => setFiltersOpen(false)} onApply={setAppliedFilters} />
         </div>
 
         {/* Main content */}
@@ -46,7 +50,7 @@ function App() {
             </div>
           )}
           <div className="flex-1 min-h-0">
-            <Products />
+            <Products filters={appliedFilters} />
           </div>
         </div>
       </div>

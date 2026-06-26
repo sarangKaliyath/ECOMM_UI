@@ -7,6 +7,9 @@ import {
   X,
 } from "lucide-react";
 import { useCategory } from "../../hooks";
+import type { ProductListParams } from "../../types";
+
+type FilterParams = Omit<ProductListParams, "page" | "size">;
 
 const RATINGS = [4, 3, 2, 1];
 
@@ -36,28 +39,47 @@ const Section = ({
   );
 };
 
-const Filters = ({ onClose }: { onClose?: () => void }) => {
+const Filters = ({
+  onClose,
+  onApply,
+}: {
+  onClose?: () => void;
+  onApply: (filters: FilterParams) => void;
+}) => {
   const { data } = useCategory();
 
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
   const [priceRange, setPriceRange] = useState(5000);
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
-
-  const toggleCategory = (cat: string) =>
-    setSelectedCategories((prev) =>
-      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat],
-    );
+  const [inStock, setInStock] = useState(false);
+  const [onSale, setOnSale] = useState(false);
 
   const reset = () => {
-    setSelectedCategories([]);
+    setSelectedCategoryId(null);
     setPriceRange(5000);
     setSelectedRating(null);
+    setInStock(false);
+    setOnSale(false);
+    onApply({});
+  };
+
+  const handleApply = () => {
+    onApply({
+      category_id: selectedCategoryId ?? undefined,
+      min_price: 100,
+      max_price: priceRange < 5000 ? priceRange : undefined,
+      rating: selectedRating ?? undefined,
+      in_stock: inStock || undefined,
+      on_sale: onSale || undefined,
+    });
   };
 
   const hasFilters =
-    selectedCategories.length > 0 ||
+    selectedCategoryId !== null ||
     priceRange < 5000 ||
-    selectedRating !== null;
+    selectedRating !== null ||
+    inStock ||
+    onSale;
 
   return (
     <div className="h-full flex flex-col bg-white overflow-y-auto">
@@ -99,8 +121,12 @@ const Filters = ({ onClose }: { onClose?: () => void }) => {
             >
               <input
                 type="checkbox"
-                checked={selectedCategories.includes(cat.name)}
-                onChange={() => toggleCategory(cat.name)}
+                checked={selectedCategoryId === Number(cat.id)}
+                onChange={() =>
+                  setSelectedCategoryId(
+                    selectedCategoryId === Number(cat.id) ? null : Number(cat.id),
+                  )
+                }
                 className="w-3.5 h-3.5 rounded accent-blue-600 cursor-pointer"
               />
               <span className="text-xs text-gray-600 group-hover:text-gray-900 transition-colors">
@@ -160,26 +186,37 @@ const Filters = ({ onClose }: { onClose?: () => void }) => {
 
         {/* Availability */}
         <Section title="Availability">
-          {["In Stock", "New Arrivals", "On Sale"].map((opt) => (
-            <label
-              key={opt}
-              className="flex items-center gap-2.5 cursor-pointer group"
-            >
-              <input
-                type="checkbox"
-                className="w-3.5 h-3.5 rounded accent-blue-600 cursor-pointer"
-              />
-              <span className="text-xs text-gray-600 group-hover:text-gray-900 transition-colors">
-                {opt}
-              </span>
-            </label>
-          ))}
+          <label className="flex items-center gap-2.5 cursor-pointer group">
+            <input
+              type="checkbox"
+              checked={inStock}
+              onChange={(e) => setInStock(e.target.checked)}
+              className="w-3.5 h-3.5 rounded accent-blue-600 cursor-pointer"
+            />
+            <span className="text-xs text-gray-600 group-hover:text-gray-900 transition-colors">
+              In Stock
+            </span>
+          </label>
+          <label className="flex items-center gap-2.5 cursor-pointer group">
+            <input
+              type="checkbox"
+              checked={onSale}
+              onChange={(e) => setOnSale(e.target.checked)}
+              className="w-3.5 h-3.5 rounded accent-blue-600 cursor-pointer"
+            />
+            <span className="text-xs text-gray-600 group-hover:text-gray-900 transition-colors">
+              On Sale
+            </span>
+          </label>
         </Section>
       </div>
 
       {/* Apply Button */}
       <div className="px-5 py-4 sticky bottom-0 bg-white border-t border-gray-100">
-        <button className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-all shadow-md hover:shadow-lg cursor-pointer">
+        <button
+          onClick={handleApply}
+          className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-all shadow-md hover:shadow-lg cursor-pointer"
+        >
           Apply Filters
         </button>
       </div>
