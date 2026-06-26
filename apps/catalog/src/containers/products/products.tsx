@@ -1,7 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { Card, CardSkeleton } from "../../common";
 import { useProducts } from "../../hooks";
-import { ArrowUpDown, ChevronDown, ChevronLeft, ChevronRight, PackageSearch } from "lucide-react";
+import {
+  ArrowUpDown,
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  PackageSearch,
+} from "lucide-react";
 import dayjs from "dayjs";
 
 const PAGE_SIZE = 10;
@@ -19,7 +25,7 @@ const Products = () => {
   const [sortOpen, setSortOpen] = useState(false);
   const sortRef = useRef<HTMLDivElement>(null);
 
-  const { data, isPending, isError } = useProducts(page, PAGE_SIZE);
+  const { data, isPending, isError } = useProducts({ page, size: PAGE_SIZE});
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -32,8 +38,10 @@ const Products = () => {
   }, []);
 
   const sorted = [...(data?.content ?? [])].sort((a, b) => {
-    if (sort === "price_asc") return Number(a.defaultPrice) - Number(b.defaultPrice);
-    if (sort === "price_desc") return Number(b.defaultPrice) - Number(a.defaultPrice);
+    if (sort === "price_asc")
+      return Number(a.defaultPrice) - Number(b.defaultPrice);
+    if (sort === "price_desc")
+      return Number(b.defaultPrice) - Number(a.defaultPrice);
     if (sort === "name_asc") return a.name.localeCompare(b.name);
     if (sort === "newest") {
       return dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf();
@@ -151,9 +159,13 @@ const Products = () => {
             ) : (
               <>
                 Page{" "}
-                <span className="font-semibold text-gray-800">{(data?.number ?? 0) + 1}</span>
-                {" "}of{" "}
-                <span className="font-semibold text-gray-800">{data?.totalPages ?? 1}</span>
+                <span className="font-semibold text-gray-800">
+                  {(data?.number ?? 0) + 1}
+                </span>{" "}
+                of{" "}
+                <span className="font-semibold text-gray-800">
+                  {data?.totalPages ?? 1}
+                </span>
               </>
             )}
           </span>
