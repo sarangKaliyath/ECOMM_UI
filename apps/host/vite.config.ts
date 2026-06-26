@@ -72,6 +72,14 @@ export default defineConfig(({ mode }) => {
           "react-dom": {
             singleton: true,
           },
+
+          zustand: {
+            singleton: true,
+          },
+
+          "@ecomm/cart": {
+            singleton: true,
+          },
         },
       }),
     ],

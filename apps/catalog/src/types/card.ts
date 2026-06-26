@@ -1,4 +1,5 @@
 export type CardType = {
+    id: string | number,
     name: string,
     primaryImageUrl: string,
     defaultPrice: number,

@@ -23,6 +23,12 @@ export default defineConfig({
           singleton: true,
           requiredVersion: "^18.0.0",
         },
+        zustand: {
+          singleton: true,
+        },
+        "@ecomm/cart": {
+          singleton: true,
+        },
       },
     }),
   ],

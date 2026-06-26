@@ -9,6 +9,7 @@ import {
   UserCircle,
   Search,
 } from "lucide-react";
+import { useCartStore } from "@ecomm/cart";
 
 const Navbar = () => {
   const [profileOpen, setProfileOpen] = useState(false);
@@ -29,7 +30,9 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const cartCount = 0;
+  const cartCount = useCartStore((s) =>
+    s.items.reduce((sum, i) => sum + i.quantity, 0)
+  );
 
   return (
     <header className="bg-gray-100 border-b border-gray-300 shrink-0">
@@ -65,7 +68,7 @@ const Navbar = () => {
             <ShoppingCart size={18} />
             <span className="hidden sm:inline">Cart</span>
             {cartCount > 0 && (
-              <span className="absolute -top-1.5 -right-1.5 bg-blue-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold leading-none">
+              <span className="absolute -top-1.5 -right-2.5 bg-blue-600 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold leading-none p-3">
                 {cartCount}
               </span>
             )}
