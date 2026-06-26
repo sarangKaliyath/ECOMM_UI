@@ -48,7 +48,9 @@ const Filters = ({
 }) => {
   const { data } = useCategory();
 
-  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | null>(
+    null,
+  );
   const [priceRange, setPriceRange] = useState(5000);
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [inStock, setInStock] = useState(false);
@@ -102,7 +104,7 @@ const Filters = ({
           {onClose && (
             <button
               onClick={onClose}
-              className="md:hidden text-gray-400 hover:text-gray-700 transition-colors cursor-pointer"
+              className="text-gray-400 hover:text-gray-700 transition-colors cursor-pointer"
               aria-label="Close filters"
             >
               <X size={18} />
@@ -124,7 +126,9 @@ const Filters = ({
                 checked={selectedCategoryId === Number(cat.id)}
                 onChange={() =>
                   setSelectedCategoryId(
-                    selectedCategoryId === Number(cat.id) ? null : Number(cat.id),
+                    selectedCategoryId === Number(cat.id)
+                      ? null
+                      : Number(cat.id),
                   )
                 }
                 className="w-3.5 h-3.5 rounded accent-blue-600 cursor-pointer"

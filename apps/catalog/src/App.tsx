@@ -8,27 +8,23 @@ import type { ProductListParams } from "./types";
 type FilterParams = Omit<ProductListParams, "page" | "size">;
 
 function App() {
-  const [filtersOpen, setFiltersOpen] = useState(
-    () =>
-      typeof window !== "undefined" &&
-      window.matchMedia("(min-width: 768px)").matches,
-  );
+  const [filtersOpen, setFiltersOpen] = useState(false);
   const [appliedFilters, setAppliedFilters] = useState<FilterParams>({});
 
   return (
     <ErrorBoundary name="Catalog">
       <div className="flex w-full h-screen overflow-hidden bg-gray-50">
-        {/* Mobile backdrop */}
+        {/* Backdrop */}
         {filtersOpen && (
           <div
-            className="fixed inset-0 bg-black/40 z-40 md:hidden"
+            className="fixed inset-0 bg-black/40 z-40"
             onClick={() => setFiltersOpen(false)}
           />
         )}
 
-        {/* Filter sidebar — drawer on mobile, static on md+ */}
+        {/* Filter sidebar — drawer on all screen sizes */}
         <div
-          className={`fixed inset-y-0 left-0 z-50 w-64 shrink-0 border-r border-gray-200 shadow-sm transition-transform duration-300 md:relative md:inset-auto md:z-auto md:translate-x-0 ${
+          className={`fixed inset-y-0 left-0 z-50 w-64 shrink-0 border-r border-gray-200 shadow-sm transition-transform duration-300 ${
             filtersOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
@@ -37,9 +33,9 @@ function App() {
 
         {/* Main content */}
         <div className="flex-1 min-w-0 flex flex-col">
-          {/* Mobile filter toggle bar */}
+          {/* Filter toggle bar */}
           {!filtersOpen && (
-            <div className="flex items-center px-4 py-2.5 bg-white border-b border-gray-200 md:hidden">
+            <div className="flex items-center px-4 py-2.5 bg-white border-b border-gray-200">
               <button
                 onClick={() => setFiltersOpen(true)}
                 className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors cursor-pointer"
