@@ -13,9 +13,10 @@ const DEBOUNCE_MS = 600
  * right away. Use in CartItemRow where the component unmounts on removal
  * (a pending timer would be cancelled by the cleanup effect, so we must act now).
  */
-export function useCartSync(id: string | number, onError?: (error: unknown) => void) {
+export function useCartSync(id: string | number = "", onError?: (error: unknown) => void) {
   const { mutate: upsertItem } = useUpsertCartItem(onError)
   const { mutate: deleteItem } = useDeleteCartItem(onError)
+
   const timerRef = useRef<ReturnType<typeof setTimeout>>()
 
   const scheduleSync = useCallback(() => {

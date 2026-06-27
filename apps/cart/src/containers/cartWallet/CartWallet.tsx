@@ -1,4 +1,6 @@
-import { useCartStore } from "@ecomm/cart";
+import { useEffect } from "react";
+import { useCartStore, useGetCartItems } from "@ecomm/cart";
+import type { CartItem } from "@ecomm/cart";
 import {
   CartCheckout,
   CartEmpty,
@@ -9,6 +11,43 @@ import {
 const CartWallet = () => {
   const items = useCartStore((s) => s.items);
   const clearCart = useCartStore((s) => s.clearCart);
+  const setItems = useCartStore((s) => s.setItems);
+
+  const { data, isLoading, isError } = useGetCartItems("GUEST");
+
+  useEffect(() => {
+    if (!data?.cartItems) return;
+    const mapped: CartItem[] = data.cartItems.map(
+      (item: {
+        productId: string | number;
+        productName: string;
+        priceSnapshot: number;
+        quantity: number;
+        imageUrl: string;
+      }) => ({
+        id: item.productId,
+        name: item.productName,
+        price: item.priceSnapshot,
+        quantity: item.quantity,
+        imageUrl: item.imageUrl,
+      })
+    );
+    setItems(mapped);
+  }, [data, setItems]);
+
+  if (isLoading)
+    return (
+      <div className="h-screen flex items-center justify-center text-gray-400">
+        Loading cart…
+      </div>
+    );
+
+  if (isError)
+    return (
+      <div className="h-screen flex items-center justify-center text-red-400">
+        Failed to load cart.
+      </div>
+    );
 
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
   const totalPrice = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
