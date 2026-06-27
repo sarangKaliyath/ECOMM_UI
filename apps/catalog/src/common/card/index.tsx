@@ -1,6 +1,7 @@
+import { useState, useRef, useEffect } from "react";
 import type { CardType } from "../../types";
 import productAlt from "../../assets/images/productAlt.jpg";
-import { ShoppingCart, Star } from "lucide-react";
+import { ShoppingCart, Star, Trash2, ChevronDown } from "lucide-react";
 import { isNewProduct } from "../../utils";
 import { useCartStore, useCartSync } from "@ecomm/cart";
 
@@ -25,8 +26,22 @@ const Card = ({
   const cartItem = useCartStore((s) => s.items.find((i) => i.id === id));
   const addItem = useCartStore((s) => s.addItem);
   const updateQuantity = useCartStore((s) => s.updateQuantity);
+  const removeItem = useCartStore((s) => s.removeItem);
   const quantity = cartItem?.quantity ?? 0;
   const { scheduleSync } = useCartSync(id);
+
+  const [qtyOpen, setQtyOpen] = useState(false);
+  const qtyRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (qtyRef.current && !qtyRef.current.contains(e.target as Node)) {
+        setQtyOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const image =
     primaryImageUrl?.includes("example") || !primaryImageUrl ? productAlt : primaryImageUrl;
@@ -139,20 +154,51 @@ const Card = ({
             Add to Cart
           </button>
         ) : (
-          <div className="flex items-center justify-between w-full mt-auto rounded-xl bg-blue-600 text-white shadow-md overflow-hidden">
+          <div className="relative flex items-center gap-2 w-full mt-auto" ref={qtyRef}>
+            {/* Qty trigger */}
             <button
-              onClick={() => { updateQuantity(id, quantity - 1); scheduleSync(); }}
-              className="px-4 py-2 text-lg font-bold hover:bg-blue-700 transition-colors cursor-pointer"
+              onClick={() => setQtyOpen((o) => !o)}
+              className="flex flex-1 items-center justify-between gap-2 px-3 py-2 rounded-xl bg-white border border-blue-600 text-blue-700 text-sm font-semibold hover:bg-blue-50 transition-colors cursor-pointer"
             >
-              −
+              <span>Qty: {quantity}</span>
+              <ChevronDown
+                size={14}
+                className={`transition-transform duration-200 ${qtyOpen ? "rotate-180" : ""}`}
+              />
             </button>
-            <span className="text-sm font-semibold">{quantity}</span>
+
+            {/* Delete */}
             <button
-              onClick={() => { updateQuantity(id, quantity + 1); scheduleSync(); }}
-              className="px-4 py-2 text-lg font-bold hover:bg-blue-700 transition-colors cursor-pointer"
+              onClick={() => { removeItem(id); scheduleSync(); }}
+              className="p-2 rounded-xl border border-gray-200 text-red-500 hover:bg-red-50 hover:border-red-300 transition-colors cursor-pointer"
+              title="Remove from cart"
             >
-              +
+              <Trash2 size={16} />
             </button>
+
+            {/* Dropdown panel — opens upward, fixed height with scroll */}
+            {qtyOpen && (
+              <div className="absolute bottom-full mb-2 left-0 right-10 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50">
+                <div className="max-h-[30vh] overflow-y-auto">
+                  {Array.from({ length: 10 }, (_, i) => i + 1).map((q) => (
+                    <button
+                      key={q}
+                      onClick={() => { updateQuantity(id, q); scheduleSync(); setQtyOpen(false); }}
+                      className={`flex items-center justify-between w-full px-4 py-2.5 text-sm transition-colors cursor-pointer ${
+                        q === quantity
+                          ? "bg-blue-50 text-blue-700 font-semibold"
+                          : "text-gray-700 hover:bg-gray-50"
+                      }`}
+                    >
+                      <span>{q}</span>
+                      {q === quantity && (
+                        <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

@@ -9,7 +9,7 @@ type Props = {
 
 const CartHeader = ({ items, totalItems, clearCart }: Props) => {
   return (
-    <div className="flex items-center justify-between mb-6 flex-shrink-0">
+    <div className={`flex items-center mb-6 flex-shrink-0 ${items.length === 0 ? "justify-center" : "justify-between"}`}>
       <div className="flex items-center gap-3">
         <ShoppingCart size={24} className="text-blue-600" />
         <h1 className="text-2xl font-bold text-gray-900">Your Cart</h1>

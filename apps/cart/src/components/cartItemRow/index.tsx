@@ -1,5 +1,6 @@
+import { useState, useRef, useEffect } from "react";
 import type { CartItem } from "@ecomm/cart";
-import {Trash2, Plus, Minus } from "lucide-react";
+import { Trash2, ChevronDown } from "lucide-react";
 import { useCartStore, useCartSync } from "@ecomm/cart";
 import { formatPrice } from "../../utils";
 
@@ -7,6 +8,19 @@ const CartItemRow = ({ item }: { item: CartItem }) => {
   const updateQuantity = useCartStore((s) => s.updateQuantity);
   const removeItem = useCartStore((s) => s.removeItem);
   const { scheduleSync, syncDelete } = useCartSync(item.id);
+
+  const [qtyOpen, setQtyOpen] = useState(false);
+  const qtyRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (qtyRef.current && !qtyRef.current.contains(e.target as Node)) {
+        setQtyOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <div className="flex items-center gap-4 p-4 bg-white rounded-2xl border border-gray-100 shadow-sm">
@@ -24,23 +38,45 @@ const CartItemRow = ({ item }: { item: CartItem }) => {
       </div>
 
       <div className="flex items-center gap-2 shrink-0">
-        <div className="flex items-center rounded-xl bg-gray-100 overflow-hidden">
+        {/* Qty dropdown */}
+        <div className="relative" ref={qtyRef}>
           <button
-            onClick={() => {
-              if (item.quantity === 1) { removeItem(item.id); syncDelete(); }
-              else { updateQuantity(item.id, item.quantity - 1); scheduleSync(); }
-            }}
-            className="px-2.5 py-1.5 hover:bg-gray-200 transition-colors cursor-pointer"
+            onClick={() => setQtyOpen((o) => !o)}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white border border-gray-200 text-gray-700 text-sm font-semibold hover:bg-gray-50 transition-colors cursor-pointer"
           >
-            <Minus size={14} />
+            <span>Qty: {item.quantity}</span>
+            <ChevronDown
+              size={13}
+              className={`transition-transform duration-200 ${qtyOpen ? "rotate-180" : ""}`}
+            />
           </button>
-          <span className="px-3 text-sm font-semibold text-gray-800">{item.quantity}</span>
-          <button
-            onClick={() => { updateQuantity(item.id, item.quantity + 1); scheduleSync(); }}
-            className="px-2.5 py-1.5 hover:bg-gray-200 transition-colors cursor-pointer"
-          >
-            <Plus size={14} />
-          </button>
+
+          {qtyOpen && (
+            <div className="absolute top-full mt-2 left-0 min-w-full bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50">
+              <div className="max-h-[30vh] overflow-y-auto">
+                {Array.from({ length: 10 }, (_, i) => i + 1).map((q) => (
+                  <button
+                    key={q}
+                    onClick={() => {
+                      updateQuantity(item.id, q);
+                      scheduleSync();
+                      setQtyOpen(false);
+                    }}
+                    className={`flex items-center justify-between w-full px-4 py-2.5 text-sm transition-colors cursor-pointer ${
+                      q === item.quantity
+                        ? "bg-blue-50 text-blue-700 font-semibold"
+                        : "text-gray-700 hover:bg-gray-50"
+                    }`}
+                  >
+                    <span>{q}</span>
+                    {q === item.quantity && (
+                      <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         <p className="w-20 text-right text-sm font-bold text-gray-900">
