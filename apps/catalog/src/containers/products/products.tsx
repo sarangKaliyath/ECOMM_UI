@@ -1,6 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { Card, CardSkeleton } from "../../common";
 import { useProducts } from "../../hooks";
+import { useGetCartItems, useCartStore } from "@ecomm/cart";
+import type { CartItem } from "@ecomm/cart";
+
 import {
   ArrowUpDown,
   ChevronDown,
@@ -27,6 +30,21 @@ const Products = ({ filters = {} }: { filters?: FilterParams }) => {
   const [sort, setSort] = useState("newest");
   const [sortOpen, setSortOpen] = useState(false);
   const sortRef = useRef<HTMLDivElement>(null);
+
+  const setItems = useCartStore((s) => s.setItems);
+  const { data: cartData } = useGetCartItems("GUEST");
+
+  useEffect(() => {
+    if (!cartData?.cartItems) return;
+    const mapped: CartItem[] = cartData.cartItems.map((item: { productId: string | number; productName: string; priceSnapshot: number; quantity: number; imageUrl: string }) => ({
+      id: item.productId,
+      name: item.productName,
+      price: item.priceSnapshot,
+      quantity: item.quantity,
+      imageUrl: item.imageUrl,
+    }));
+    setItems(mapped);
+  }, [cartData, setItems]);
 
   useEffect(() => {
     setPage(0);

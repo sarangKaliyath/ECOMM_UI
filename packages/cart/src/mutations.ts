@@ -9,8 +9,12 @@ export const useUpsertCartItem = (onError?: OnError) =>
 export const useDeleteCartItem = (onError?: OnError) =>
   useMutation({ mutationFn: deleteCartItemApi, onError })
 
-export const useGetCartItems = (cartType: string = 'GUEST') =>
+export const useGetCartItems = (
+  cartType: string = 'GUEST',
+  options?: { enabled?: boolean }
+) =>
   useQuery({
     queryKey: ['cart', cartType],
     queryFn: () => getCartItemsApi(cartType).then((res) => res.data),
+    enabled: options?.enabled ?? true,
   })
