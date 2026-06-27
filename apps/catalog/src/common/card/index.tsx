@@ -2,7 +2,7 @@ import type { CardType } from "../../types";
 import productAlt from "../../assets/images/productAlt.jpg";
 import { ShoppingCart, Star } from "lucide-react";
 import { isNewProduct } from "../../utils";
-import { useCartStore } from "@ecomm/cart";
+import { useCartStore, useCartSync } from "@ecomm/cart";
 
 const formatPrice = (amount: number, currency = "USD") =>
   new Intl.NumberFormat("en-US", { style: "currency", currency }).format(amount);
@@ -26,6 +26,7 @@ const Card = ({
   const addItem = useCartStore((s) => s.addItem);
   const updateQuantity = useCartStore((s) => s.updateQuantity);
   const quantity = cartItem?.quantity ?? 0;
+  const { scheduleSync } = useCartSync(id);
 
   const image =
     primaryImageUrl?.includes("example") || !primaryImageUrl ? productAlt : primaryImageUrl;
@@ -131,7 +132,7 @@ const Card = ({
         {/* Cart */}
         {quantity === 0 ? (
           <button
-            onClick={() => addItem({ id, name, price: defaultPrice, imageUrl: image, currencyCode })}
+            onClick={() => { addItem({ id, name, price: defaultPrice, imageUrl: image, currencyCode }); scheduleSync(); }}
             className="flex items-center justify-center gap-2 w-full py-2 mt-auto rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-all cursor-pointer shadow-md hover:shadow-lg"
           >
             <ShoppingCart size={15} />
@@ -140,14 +141,14 @@ const Card = ({
         ) : (
           <div className="flex items-center justify-between w-full mt-auto rounded-xl bg-blue-600 text-white shadow-md overflow-hidden">
             <button
-              onClick={() => updateQuantity(id, quantity - 1)}
+              onClick={() => { updateQuantity(id, quantity - 1); scheduleSync(); }}
               className="px-4 py-2 text-lg font-bold hover:bg-blue-700 transition-colors cursor-pointer"
             >
               −
             </button>
             <span className="text-sm font-semibold">{quantity}</span>
             <button
-              onClick={() => updateQuantity(id, quantity + 1)}
+              onClick={() => { updateQuantity(id, quantity + 1); scheduleSync(); }}
               className="px-4 py-2 text-lg font-bold hover:bg-blue-700 transition-colors cursor-pointer"
             >
               +

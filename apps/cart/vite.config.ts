@@ -29,6 +29,10 @@ export default defineConfig({
         "@ecomm/cart": {
           singleton: true,
         },
+        "@tanstack/react-query": {
+          singleton: true,
+          requiredVersion: "^5.0.0",
+        },
       },
     }),
   ],
