@@ -63,9 +63,11 @@ const Filters = ({
     setInStock(false);
     setOnSale(false);
     onApply({});
+    onClose?.();
   };
 
   const handleApply = () => {
+    onClose?.();
     onApply({
       category_id: selectedCategoryId ?? undefined,
       min_price: 100,

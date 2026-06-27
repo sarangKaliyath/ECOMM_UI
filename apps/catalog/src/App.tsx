@@ -28,23 +28,23 @@ function App() {
             filtersOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
-          <Filters onClose={() => setFiltersOpen(false)} onApply={setAppliedFilters} />
+          <Filters
+            onClose={() => setFiltersOpen(false)}
+            onApply={setAppliedFilters}
+          />
         </div>
 
         {/* Main content */}
         <div className="flex-1 min-w-0 flex flex-col">
-          {/* Filter toggle bar */}
-          {!filtersOpen && (
-            <div className="flex items-center px-4 py-2.5 bg-white border-b border-gray-200">
-              <button
-                onClick={() => setFiltersOpen(true)}
-                className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors cursor-pointer"
-              >
-                <SlidersHorizontal size={15} />
-                Filters
-              </button>
-            </div>
-          )}
+          <div className="flex items-center px-4 py-2.5 bg-white border-b border-gray-200">
+            <button
+              onClick={() => setFiltersOpen(true)}
+              className="flex items-center gap-2 text-sm font-medium text-gray-700 hover:text-blue-600 transition-colors cursor-pointer"
+            >
+              <SlidersHorizontal size={15} />
+              Filters
+            </button>
+          </div>
           <div className="flex-1 min-h-0">
             <Products filters={appliedFilters} />
           </div>
