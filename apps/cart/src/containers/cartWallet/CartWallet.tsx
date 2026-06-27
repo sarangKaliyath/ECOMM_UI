@@ -1,0 +1,42 @@
+import { useCartStore } from "@ecomm/cart";
+import {
+  CartCheckout,
+  CartEmpty,
+  CartHeader,
+  CartItemRow,
+} from "../../components";
+
+const CartWallet = () => {
+  const items = useCartStore((s) => s.items);
+  const clearCart = useCartStore((s) => s.clearCart);
+
+  const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
+  const totalPrice = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
+
+  return (
+    <div className="h-screen bg-gray-50 p-6 flex flex-col overflow-hidden">
+      <div className="max-w-2xl mx-auto w-full flex flex-col flex-1 overflow-hidden">
+        <CartHeader
+          items={items}
+          totalItems={totalItems}
+          clearCart={clearCart}
+        />
+
+        {items.length === 0 ? (
+          <CartEmpty />
+        ) : (
+          <div className="flex flex-col flex-1 overflow-hidden min-h-0">
+            <div className="flex flex-col gap-3 mb-6 overflow-y-auto flex-1 min-h-0">
+              {items.map((item) => (
+                <CartItemRow key={item.id} item={item} />
+              ))}
+            </div>
+            <CartCheckout totalItems={totalItems} totalPrice={totalPrice} />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default CartWallet;

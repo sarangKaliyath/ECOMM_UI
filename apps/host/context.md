@@ -11,12 +11,10 @@ Shell / container application. Loads and orchestrates all remote micro-frontends
 ```
 main.tsx
  └─ ErrorBoundary (@ecomm/ui)
-     └─ App.tsx          layout shell
-         ├─ Navbar        fixed top bar
-         └─ <Suspense>
-             └─ CatalogApp   (lazy, from remote)
-             └─ CheckoutApp  (lazy, from remote) ← commented out
-             └─ CartApp      (lazy, from remote) ← commented out
+     └─ App.tsx          TanStack Router (RouterProvider)
+         └─ rootRoute    layout shell (Navbar + Outlet)
+             ├─ /        → CatalogApp (lazy, from remote)
+             └─ /cart    → CartApp    (lazy, from remote)
 ```
 
 ---
@@ -94,11 +92,11 @@ Add both dev and production entries whenever a new remote is added.
 ---
 
 ## Remote Registry
-| Remote | Federation name | Dev URL | Status |
-|--------|----------------|---------|--------|
-| Catalog | `catalog/CatalogApp` | `localhost:3001` | Active |
-| Checkout | `checkout/CheckoutApp` | `localhost:3002` | Commented out |
-| Cart | `cart/CartApp` | `localhost:3003` | Commented out |
+| Remote | Federation name | Dev URL | Route | Status |
+|--------|----------------|---------|-------|--------|
+| Catalog | `catalog/CatalogApp` | `localhost:3001` | `/` | Active |
+| Cart | `cart/CartApp` | `localhost:3003` | `/cart` | Active |
+| Checkout | `checkout/CheckoutApp` | `localhost:3002` | `/checkout` | Not yet wired |
 
 ---
 
@@ -108,7 +106,6 @@ The `remoteHMRBridge([3001, 3002, 3003])` Vite plugin (`apply: "serve"`) injects
 ---
 
 ## Known Gaps
-- [ ] Cart badge count hardcoded to `0` — needs global cart state shared from cart remote
 - [ ] No real authentication — Navbar login is a local demo toggle
-- [ ] CheckoutApp and CartApp remotes are commented out pending implementation
-- [ ] No client-side routing — TanStack Router is installed but not configured
+- [ ] CheckoutApp remote is not yet wired to a route
+- [ ] No product detail page

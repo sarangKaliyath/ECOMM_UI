@@ -10,12 +10,14 @@ import {
   Search,
 } from "lucide-react";
 import { useCartStore } from "@ecomm/cart";
+import { useNavigate } from "@tanstack/react-router";
 
 const Navbar = () => {
   const [profileOpen, setProfileOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -31,13 +33,18 @@ const Navbar = () => {
   }, []);
 
   const cartCount = useCartStore((s) =>
-    s.items.reduce((sum, i) => sum + i.quantity, 0)
+    s.items.reduce((sum, i) => sum + i.quantity, 0),
   );
 
   return (
     <header className="bg-gray-100 border-b border-gray-300 shrink-0">
       <div className="relative px-6 py-4 flex items-center">
-        <h1 className="text-2xl font-bold tracking-tight shrink-0 text-gray-900">ShopEase</h1>
+        <h1
+          className="text-2xl font-bold tracking-tight shrink-0 text-gray-900 cursor-pointer"
+          onClick={() => navigate({ to: "/" })}
+        >
+          ShopEase
+        </h1>
 
         {/* Desktop search bar — absolutely centered in the navbar */}
         <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 w-full max-w-sm lg:max-w-md xl:max-w-lg">
@@ -64,7 +71,10 @@ const Navbar = () => {
           </button>
 
           {/* Cart Button */}
-          <button className="relative flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 transition-all text-sm font-medium cursor-pointer">
+          <button
+            onClick={() => navigate({ to: "/cart" })}
+            className="relative flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white hover:bg-gray-50 border border-gray-200 text-gray-700 transition-all text-sm font-medium cursor-pointer"
+          >
             <ShoppingCart size={18} />
             <span className="hidden sm:inline">Cart</span>
             {cartCount > 0 && (
