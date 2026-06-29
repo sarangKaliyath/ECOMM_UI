@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useCartStore, useGetCartItems } from "@ecomm/cart";
+import { useCartStore, useGetCartItems, useCartSync } from "@ecomm/cart";
 import type { CartItem } from "@ecomm/cart";
 import {
   CartCheckout,
@@ -10,8 +10,8 @@ import {
 
 const CartWallet = () => {
   const items = useCartStore((s) => s.items);
-  const clearCart = useCartStore((s) => s.clearCart);
   const setItems = useCartStore((s) => s.setItems);
+  const { clearCart } = useCartSync();
 
   const { data, isLoading, isError } = useGetCartItems("GUEST");
 
@@ -58,7 +58,7 @@ const CartWallet = () => {
         <CartHeader
           items={items}
           totalItems={totalItems}
-          clearCart={clearCart}
+          clearCart={() => clearCart("GUEST")}
         />
 
         {items.length === 0 ? (

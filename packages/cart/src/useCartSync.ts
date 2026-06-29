@@ -6,6 +6,7 @@ import {
   useUpsertCartItem,
   useDeleteCartItem,
   useUpdateCartItemQuantity,
+  useClearCartItem,
 } from "./mutations";
 
 const DEBOUNCE_MS = 600;
@@ -30,6 +31,7 @@ export function useCartSync(
   const { mutate: upsertItem } = useUpsertCartItem(onError);
   const { mutate: deleteItem } = useDeleteCartItem(onError);
   const { mutate: updateQuantity } = useUpdateCartItemQuantity(onError);
+  const {mutate: clearCartItems} = useClearCartItem(onError);
 
   const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
 
@@ -80,6 +82,20 @@ export function useCartSync(
     [id, deleteItem],
   );
 
+  const clearCart = useCallback(
+    (cartType: string | null = "GUEST") => {
+      const itemsSnapshot = useCartStore.getState().items;
+      useCartStore.getState().clearCart();
+
+      clearCartItems(cartType, {
+        onError: () => {
+          useCartStore.getState().setItems(itemsSnapshot);
+        },
+      });
+    },
+    [clearCartItems],
+  );
+
   useEffect(
     () => () => {
       if (timerRef.current) {
@@ -89,5 +105,5 @@ export function useCartSync(
     [],
   );
 
-  return { scheduleSync, scheduleQuantityUpdate, syncDelete };
+  return { scheduleSync, scheduleQuantityUpdate, syncDelete, clearCart};
 }
