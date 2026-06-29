@@ -28,7 +28,7 @@ const Card = ({
   const updateQuantity = useCartStore((s) => s.updateQuantity);
   const removeItem = useCartStore((s) => s.removeItem);
   const quantity = cartItem?.quantity ?? 0;
-  const { scheduleSync, scheduleQuantityUpdate } = useCartSync(id);
+  const { scheduleSync, scheduleQuantityUpdate, syncDelete } = useCartSync(id);
 
   const [qtyOpen, setQtyOpen] = useState(false);
   const qtyRef = useRef<HTMLDivElement>(null);
@@ -169,7 +169,7 @@ const Card = ({
 
             {/* Delete */}
             <button
-              onClick={() => { removeItem(id); scheduleSync(); }}
+              onClick={() => { removeItem(id); syncDelete(cartItem); }}
               className="p-2 rounded-xl border border-gray-200 text-red-500 hover:bg-red-50 hover:border-red-300 transition-colors cursor-pointer"
               title="Remove from cart"
             >

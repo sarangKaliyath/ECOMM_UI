@@ -85,7 +85,7 @@ const CartItemRow = ({ item }: { item: CartItem }) => {
           </p>
 
           <button
-            onClick={() => { removeItem(item.id); syncDelete(); }}
+            onClick={() => { removeItem(item.id); syncDelete(item); }}
             className="p-1.5 rounded-lg text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
           >
             <Trash2 size={16} />

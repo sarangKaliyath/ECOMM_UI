@@ -25,5 +25,5 @@ export const updateCartItemQuantityApi = (
     quantity,
   });
 
-export const deleteCartItemApi = (id: string | number) =>
-  axiosInstance.delete(`/cart/${id}`);
+export const deleteCartItemApi = (cartType: String = 'GUEST', productId: String) =>
+  axiosInstance.delete(`/remove/${cartType}/${productId}`);

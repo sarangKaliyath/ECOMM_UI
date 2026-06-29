@@ -7,7 +7,10 @@ export const useUpsertCartItem = (onError?: OnError) =>
   useMutation({ mutationFn: upsertCartItemApi, onError })
 
 export const useDeleteCartItem = (onError?: OnError) =>
-  useMutation({ mutationFn: deleteCartItemApi, onError })
+  useMutation({
+    mutationFn: (productId: string | number) => deleteCartItemApi('GUEST', String(productId)),
+    onError,
+  })
 
 export const useUpdateCartItemQuantity = (onError?: OnError) =>
   useMutation({

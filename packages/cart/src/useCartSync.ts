@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useCartStore } from './store'
+import type { CartItem } from './store'
 import { useUpsertCartItem, useDeleteCartItem, useUpdateCartItemQuantity } from './mutations'
 
 const DEBOUNCE_MS = 600
@@ -52,9 +53,18 @@ export function useCartSync(id: string | number = "", onError?: (error: unknown)
     }, DEBOUNCE_MS)
   }, [id, updateQuantity])
 
-  const syncDelete = useCallback(() => {
+  const syncDelete = useCallback((itemSnapshot?: CartItem) => {
     clearTimeout(timerRef.current)
-    deleteItem(id)
+    deleteItem(id, {
+      onError: () => {
+        if (itemSnapshot) {
+          const items = useCartStore.getState().items
+          if (!items.find((i) => i.id === id)) {
+            useCartStore.getState().setItems([...items, itemSnapshot])
+          }
+        }
+      },
+    })
   }, [id, deleteItem])
 
   useEffect(() => () => clearTimeout(timerRef.current), [])
