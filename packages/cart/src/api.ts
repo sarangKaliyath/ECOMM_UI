@@ -14,5 +14,16 @@ export const upsertCartItemApi = (item: CartItem) =>
 export const getCartItemsApi = (cartType: String = "GUEST") =>
   axiosInstance.get("/get/" + cartType);
 
+export const updateCartItemQuantityApi = (
+  cartType: String = "GUEST",
+  productId: number,
+  quantity: number,
+) =>
+  axiosInstance.patch("/quantity", {
+    cartType,
+    productId,
+    quantity,
+  });
+
 export const deleteCartItemApi = (id: string | number) =>
   axiosInstance.delete(`/cart/${id}`);

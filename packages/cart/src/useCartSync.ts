@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { useCartStore } from './store'
-import { useUpsertCartItem, useDeleteCartItem } from './mutations'
+import { useUpsertCartItem, useDeleteCartItem, useUpdateCartItemQuantity } from './mutations'
 
 const DEBOUNCE_MS = 600
 
@@ -14,8 +15,10 @@ const DEBOUNCE_MS = 600
  * (a pending timer would be cancelled by the cleanup effect, so we must act now).
  */
 export function useCartSync(id: string | number = "", onError?: (error: unknown) => void) {
+  const queryClient = useQueryClient()
   const { mutate: upsertItem } = useUpsertCartItem(onError)
   const { mutate: deleteItem } = useDeleteCartItem(onError)
+  const { mutate: updateQuantity } = useUpdateCartItemQuantity(onError)
 
   const timerRef = useRef<ReturnType<typeof setTimeout>>()
 
@@ -29,6 +32,26 @@ export function useCartSync(id: string | number = "", onError?: (error: unknown)
     }, DEBOUNCE_MS)
   }, [id, upsertItem, deleteItem])
 
+  // Use PATCH /quantity instead of POST /add when the item already exists in cart.
+  const scheduleQuantityUpdate = useCallback(() => {
+    clearTimeout(timerRef.current)
+    timerRef.current = setTimeout(() => {
+      const item = useCartStore.getState().items.find(i => i.id === id)
+      if (!item) return
+      updateQuantity(
+        { productId: Number(id), quantity: item.quantity },
+        {
+          onSuccess: (response) => {
+            if (response.data) {
+              // Keep RQ cache in sync so navigating to /cart doesn't flash stale quantities
+              queryClient.setQueryData(['cart', 'GUEST'], response.data)
+            }
+          },
+        }
+      )
+    }, DEBOUNCE_MS)
+  }, [id, updateQuantity])
+
   const syncDelete = useCallback(() => {
     clearTimeout(timerRef.current)
     deleteItem(id)
@@ -36,5 +59,5 @@ export function useCartSync(id: string | number = "", onError?: (error: unknown)
 
   useEffect(() => () => clearTimeout(timerRef.current), [])
 
-  return { scheduleSync, syncDelete }
+  return { scheduleSync, scheduleQuantityUpdate, syncDelete }
 }

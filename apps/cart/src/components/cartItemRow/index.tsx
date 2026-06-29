@@ -7,7 +7,7 @@ import { formatPrice } from "../../utils";
 const CartItemRow = ({ item }: { item: CartItem }) => {
   const updateQuantity = useCartStore((s) => s.updateQuantity);
   const removeItem = useCartStore((s) => s.removeItem);
-  const { scheduleSync, syncDelete } = useCartSync(item.id);
+  const { scheduleQuantityUpdate, syncDelete } = useCartSync(item.id);
 
   const [qtyOpen, setQtyOpen] = useState(false);
   const qtyRef = useRef<HTMLDivElement>(null);
@@ -60,7 +60,7 @@ const CartItemRow = ({ item }: { item: CartItem }) => {
                       key={q}
                       onClick={() => {
                         updateQuantity(item.id, q);
-                        scheduleSync();
+                        scheduleQuantityUpdate();
                         setQtyOpen(false);
                       }}
                       className={`flex items-center justify-between w-full px-4 py-2.5 text-sm transition-colors cursor-pointer ${

@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { upsertCartItemApi, getCartItemsApi, deleteCartItemApi} from './api'
+import { upsertCartItemApi, getCartItemsApi, deleteCartItemApi, updateCartItemQuantityApi } from './api'
 
 type OnError = (error: unknown) => void
 
@@ -8,6 +8,13 @@ export const useUpsertCartItem = (onError?: OnError) =>
 
 export const useDeleteCartItem = (onError?: OnError) =>
   useMutation({ mutationFn: deleteCartItemApi, onError })
+
+export const useUpdateCartItemQuantity = (onError?: OnError) =>
+  useMutation({
+    mutationFn: ({ productId, quantity }: { productId: number; quantity: number }) =>
+      updateCartItemQuantityApi('GUEST', productId, quantity),
+    onError,
+  })
 
 export const useGetCartItems = (
   cartType: string = 'GUEST',

@@ -28,7 +28,7 @@ const Card = ({
   const updateQuantity = useCartStore((s) => s.updateQuantity);
   const removeItem = useCartStore((s) => s.removeItem);
   const quantity = cartItem?.quantity ?? 0;
-  const { scheduleSync } = useCartSync(id);
+  const { scheduleSync, scheduleQuantityUpdate } = useCartSync(id);
 
   const [qtyOpen, setQtyOpen] = useState(false);
   const qtyRef = useRef<HTMLDivElement>(null);
@@ -183,7 +183,7 @@ const Card = ({
                   {Array.from({ length: 10 }, (_, i) => i + 1).map((q) => (
                     <button
                       key={q}
-                      onClick={() => { updateQuantity(id, q); scheduleSync(); setQtyOpen(false); }}
+                      onClick={() => { updateQuantity(id, q); scheduleQuantityUpdate(); setQtyOpen(false); }}
                       className={`flex items-center justify-between w-full px-4 py-2.5 text-sm transition-colors cursor-pointer ${
                         q === quantity
                           ? "bg-blue-50 text-blue-700 font-semibold"
