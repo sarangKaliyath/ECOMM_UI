@@ -13,7 +13,7 @@ const CartWallet = () => {
   const setItems = useCartStore((s) => s.setItems);
   const { clearCart } = useCartSync();
 
-  const { data, isLoading, isError } = useGetCartItems("GUEST");
+  const { data, isLoading, isError } = useGetCartItems();
 
   useEffect(() => {
     if (!data?.cartItems) return;
@@ -58,7 +58,7 @@ const CartWallet = () => {
         <CartHeader
           items={items}
           totalItems={totalItems}
-          clearCart={() => clearCart("GUEST")}
+          clearCart={() => clearCart()}
         />
 
         {items.length === 0 ? (

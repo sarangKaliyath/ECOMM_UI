@@ -12,7 +12,8 @@
   "peerDependencies": {
     "react": "^19.2.6",
     "zustand": "^5.0.0",
-    "@tanstack/react-query": "^5.0.0"
+    "@tanstack/react-query": "^5.0.0",
+    "@ecomm/auth": "workspace:*"
   },
   "devDependencies": {
     "@types/react": "^19.2.15",

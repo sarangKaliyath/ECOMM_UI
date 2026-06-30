@@ -66,6 +66,9 @@ importers:
 
   apps/cart:
     dependencies:
+      '@ecomm/auth':
+        specifier: workspace:*
+        version: link:../../packages/auth
       '@ecomm/cart':
         specifier: workspace:*
         version: link:../../packages/cart
@@ -127,6 +130,9 @@ importers:
 
   apps/catalog:
     dependencies:
+      '@ecomm/auth':
+        specifier: workspace:*
+        version: link:../../packages/auth
       '@ecomm/cart':
         specifier: workspace:*
         version: link:../../packages/cart
@@ -191,6 +197,9 @@ importers:
 
   apps/checkout:
     dependencies:
+      '@ecomm/auth':
+        specifier: workspace:*
+        version: link:../../packages/auth
       '@ecomm/ui':
         specifier: workspace:*
         version: link:../../packages/ui
@@ -249,6 +258,9 @@ importers:
 
   apps/host:
     dependencies:
+      '@ecomm/auth':
+        specifier: workspace:*
+        version: link:../../packages/auth
       '@ecomm/cart':
         specifier: workspace:*
         version: link:../../packages/cart
@@ -314,8 +326,36 @@ importers:
         specifier: ^8.0.12
         version: 8.0.14(@types/node@24.12.4)(jiti@2.7.0)(yaml@2.9.0)
 
+  packages/auth:
+    dependencies:
+      '@tanstack/react-query':
+        specifier: ^5.0.0
+        version: 5.100.14(react@19.2.6)
+      axios:
+        specifier: ^1.0.0
+        version: 1.18.1
+      react:
+        specifier: ^19.2.6
+        version: 19.2.6
+      zustand:
+        specifier: ^5.0.0
+        version: 5.0.14(@types/react@19.2.15)(react@19.2.6)(use-sync-external-store@1.6.0(react@19.2.6))
+    devDependencies:
+      '@types/react':
+        specifier: ^19.2.15
+        version: 19.2.15
+      typescript:
+        specifier: ~6.0.3
+        version: 6.0.3
+
   packages/cart:
     dependencies:
+      '@ecomm/auth':
+        specifier: workspace:*
+        version: link:../auth
+      '@tanstack/react-query':
+        specifier: ^5.0.0
+        version: 5.100.14(react@19.2.6)
       react:
         specifier: ^19.2.6
         version: 19.2.6

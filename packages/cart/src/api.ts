@@ -1,32 +1,35 @@
 import type { CartItem } from "./store";
 import axiosInstance from "./axiosInstance";
+import { useAuthStore } from "@ecomm/auth";
+
+const getCartType = () =>
+  useAuthStore.getState().isAuthenticated ? "USER" : "GUEST";
 
 export const upsertCartItemApi = (item: CartItem) =>
   axiosInstance.post("/add", {
     productId: item.id,
-    cartType: "GUEST", // TODO: need to configure for USER type, after auth implementation.
+    cartType: getCartType(),
     quantity: item.quantity,
     imageUrl: item.imageUrl,
     productName: item.name,
     priceSnapshot: item.price,
   });
 
-export const getCartItemsApi = (cartType: String = "GUEST") =>
-  axiosInstance.get("/get/" + cartType);
+export const getCartItemsApi = (cartType?: string) =>
+  axiosInstance.get("/get/" + (cartType ?? getCartType()));
 
 export const updateCartItemQuantityApi = (
-  cartType: String = "GUEST",
   productId: number,
   quantity: number,
 ) =>
   axiosInstance.patch("/quantity", {
-    cartType,
+    cartType: getCartType(),
     productId,
     quantity,
   });
 
-export const deleteCartItemApi = (cartType: String = 'GUEST', productId: String) =>
-  axiosInstance.delete(`/remove/${cartType}/${productId}`);
+export const deleteCartItemApi = (productId: string | number) =>
+  axiosInstance.delete(`/remove/${getCartType()}/${productId}`);
 
-export const clearCartApi = (cartType: String | null = "GUEST") => 
-    axiosInstance.delete(`/clear/${cartType}`)
+export const clearCartApi = () =>
+  axiosInstance.delete(`/clear/${getCartType()}`);

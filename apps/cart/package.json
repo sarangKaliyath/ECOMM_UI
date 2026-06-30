@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ecomm/auth": "workspace:*",
     "@ecomm/cart": "workspace:*",
     "@ecomm/ui": "workspace:*",
     "react": "^19.2.6",

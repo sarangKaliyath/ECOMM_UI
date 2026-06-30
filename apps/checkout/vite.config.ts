@@ -28,6 +28,9 @@ export default defineConfig({
         "@ecomm/cart": {
           singleton: true,
         },
+        "@ecomm/auth": {
+          singleton: true,
+        },
       },
     }),
   ],

@@ -10,14 +10,17 @@ import {
   Search,
 } from "lucide-react";
 import { useCartStore } from "@ecomm/cart";
+import { useAuthStore, useLogout } from "@ecomm/auth";
 import { useNavigate } from "@tanstack/react-router";
 
 const Navbar = () => {
   const [profileOpen, setProfileOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const logoutMutation = useLogout();
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -35,6 +38,11 @@ const Navbar = () => {
   const cartCount = useCartStore((s) =>
     s.items.reduce((sum, i) => sum + i.quantity, 0),
   );
+
+  const handleSignOut = () => {
+    logoutMutation.mutate();
+    setProfileOpen(false);
+  };
 
   return (
     <header className="bg-gray-100 border-b border-gray-300 shrink-0">
@@ -100,12 +108,12 @@ const Navbar = () => {
 
             {profileOpen && (
               <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden z-50">
-                {isLoggedIn ? (
+                {isAuthenticated ? (
                   <>
                     <div className="px-4 py-3 border-b border-gray-100">
-                      <p className="text-xs text-gray-400">Signed in as</p>
+                      <p className="text-xs text-gray-400">Signed in</p>
                       <p className="text-sm font-semibold text-gray-800 truncate">
-                        user@example.com
+                        My Account
                       </p>
                     </div>
 
@@ -127,14 +135,12 @@ const Navbar = () => {
 
                     <div className="border-t border-gray-100">
                       <button
-                        onClick={() => {
-                          setIsLoggedIn(false);
-                          setProfileOpen(false);
-                        }}
-                        className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                        onClick={handleSignOut}
+                        disabled={logoutMutation.isPending}
+                        className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors cursor-pointer disabled:opacity-60"
                       >
                         <LogOut size={16} />
-                        Sign Out
+                        {logoutMutation.isPending ? "Signing out…" : "Sign Out"}
                       </button>
                     </div>
                   </>
@@ -149,8 +155,8 @@ const Navbar = () => {
 
                     <button
                       onClick={() => {
-                        setIsLoggedIn(true);
                         setProfileOpen(false);
+                        navigate({ to: "/login" });
                       }}
                       className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
                     >
@@ -159,7 +165,10 @@ const Navbar = () => {
                     </button>
 
                     <button
-                      onClick={() => setProfileOpen(false)}
+                      onClick={() => {
+                        setProfileOpen(false);
+                        navigate({ to: "/signup" });
+                      }}
                       className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
                     >
                       <UserCircle size={16} className="text-blue-600" />
