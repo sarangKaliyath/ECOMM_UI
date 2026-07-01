@@ -33,11 +33,12 @@ export const useUpdateCartItemQuantity = (onError?: OnError) =>
 
 export const useGetCartItems = (options?: { enabled?: boolean }) => {
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const authReady = useAuthStore((s) => s.authReady);
   const cartType = isAuthenticated ? "USER" : "GUEST";
   return useQuery({
     queryKey: ["cart", cartType],
-    queryFn: () => getCartItemsApi(cartType).then((res) => res.data),
-    enabled: options?.enabled ?? true,
+    queryFn: () => getCartItemsApi().then((res) => res.data),
+    enabled: authReady && (options?.enabled ?? true),
   });
 };
 

@@ -12,12 +12,14 @@ import {
 import { useCartStore } from "@ecomm/cart";
 import { useAuthStore, useLogout } from "@ecomm/auth";
 import { useNavigate } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Navbar = () => {
   const [profileOpen, setProfileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
   const logoutMutation = useLogout();
@@ -40,7 +42,12 @@ const Navbar = () => {
   );
 
   const handleSignOut = () => {
-    logoutMutation.mutate();
+    logoutMutation.mutate(undefined, {
+      onSuccess: () => {
+        queryClient.removeQueries({ queryKey: ["cart"] });
+        useCartStore.getState().clearCart();
+      },
+    });
     setProfileOpen(false);
   };
 

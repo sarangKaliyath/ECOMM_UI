@@ -1,20 +1,18 @@
-import { createRoute, useNavigate } from "@tanstack/react-router";
+import { createRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { rootRoute } from "./__root";
 import { AuthCard } from "@ecomm/ui";
 import { useLogin, useSignup, useAuthStore } from "@ecomm/auth";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { mergeCartApi, useCartStore } from "@ecomm/cart";
 
 function LoginPage() {
   const navigate = useNavigate();
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const queryClient = useQueryClient();
   const [mode, setMode] = useState<"login" | "signup">("login");
 
   const loginMutation = useLogin();
   const signupMutation = useSignup();
-
-  useEffect(() => {
-    if (isAuthenticated) navigate({ to: "/" });
-  }, [isAuthenticated]);
 
   const isPending = loginMutation.isPending || signupMutation.isPending;
   const activeError =
@@ -28,14 +26,33 @@ function LoginPage() {
     setMode(next);
   };
 
+  const mergeAndNavigate = async () => {
+    try {
+      const { data } = await mergeCartApi();
+      queryClient.setQueryData(["cart", "USER"], data);
+      useCartStore.getState().setItems(
+        data.cartItems.map((item) => ({
+          id: item.productId,
+          name: item.productName,
+          price: item.priceSnapshot,
+          quantity: item.quantity,
+          imageUrl: item.imageUrl,
+        })),
+      );
+    } catch {
+      // non-fatal: proceed even if merge fails
+    }
+    navigate({ to: "/" });
+  };
+
   const handleLogin = (email: string, password: string) => {
-    loginMutation.mutate({ email, password }, { onSuccess: () => navigate({ to: "/" }) });
+    loginMutation.mutate({ email, password }, { onSuccess: mergeAndNavigate });
   };
 
   const handleSignup = (name: string, email: string, password: string) => {
     signupMutation.mutate(
       { name, email, password },
-      { onSuccess: () => navigate({ to: "/" }) },
+      { onSuccess: mergeAndNavigate },
     );
   };
 
@@ -59,5 +76,8 @@ function LoginPage() {
 export const loginRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/login",
+  beforeLoad: () => {
+    if (useAuthStore.getState().isAuthenticated) throw redirect({ to: "/" });
+  },
   component: LoginPage,
 });

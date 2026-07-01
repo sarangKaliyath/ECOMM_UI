@@ -1,35 +1,46 @@
 import type { CartItem } from "./store";
 import axiosInstance from "./axiosInstance";
-import { useAuthStore } from "@ecomm/auth";
 
-const getCartType = () =>
-  useAuthStore.getState().isAuthenticated ? "USER" : "GUEST";
+export interface CartItemDto {
+  productId: string | number;
+  productName: string;
+  imageUrl: string;
+  quantity: number;
+  priceSnapshot: number;
+}
+
+export interface CartResponseDto {
+  cartId?: string;
+  cartType: string;
+  cartItems: CartItemDto[];
+  totalPrice: number;
+  totalQuantity: number;
+  lastUpdatedAt: string;
+}
+
+export const mergeCartApi = () =>
+  axiosInstance.post<CartResponseDto>("/merge");
 
 export const upsertCartItemApi = (item: CartItem) =>
   axiosInstance.post("/add", {
     productId: item.id,
-    cartType: getCartType(),
     quantity: item.quantity,
     imageUrl: item.imageUrl,
     productName: item.name,
     priceSnapshot: item.price,
   });
 
-export const getCartItemsApi = (cartType?: string) =>
-  axiosInstance.get("/get/" + (cartType ?? getCartType()));
+export const getCartItemsApi = () =>
+  axiosInstance.get("/get");
 
 export const updateCartItemQuantityApi = (
   productId: number,
   quantity: number,
 ) =>
-  axiosInstance.patch("/quantity", {
-    cartType: getCartType(),
-    productId,
-    quantity,
-  });
+  axiosInstance.patch("/quantity", { productId, quantity });
 
 export const deleteCartItemApi = (productId: string | number) =>
-  axiosInstance.delete(`/remove/${getCartType()}/${productId}`);
+  axiosInstance.delete(`/remove/${productId}`);
 
 export const clearCartApi = () =>
-  axiosInstance.delete(`/clear/${getCartType()}`);
+  axiosInstance.delete(`/clear`);
