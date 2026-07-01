@@ -1,6 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useCartStore, useGetCartItems, useCartSync } from "@ecomm/cart";
 import type { CartItem } from "@ecomm/cart";
+import { useAuthStore } from "@ecomm/auth";
+import { LoginPromptModal } from "@ecomm/ui";
 import {
   CartCheckout,
   CartEmpty,
@@ -12,6 +14,8 @@ const CartWallet = () => {
   const items = useCartStore((s) => s.items);
   const setItems = useCartStore((s) => s.setItems);
   const { clearCart } = useCartSync();
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
   const { data, isLoading, isError } = useGetCartItems();
 
@@ -52,6 +56,14 @@ const CartWallet = () => {
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
   const totalPrice = items.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
+  const handleCheckout = () => {
+    if (isAuthenticated) {
+      window.location.href = "/checkout";
+    } else {
+      setShowLoginPrompt(true);
+    }
+  };
+
   return (
     <div className="h-screen bg-gray-50 p-6 flex flex-col overflow-hidden">
       <div className="max-w-2xl mx-auto w-full flex flex-col flex-1 overflow-hidden">
@@ -70,10 +82,21 @@ const CartWallet = () => {
                 <CartItemRow key={item.id} item={item} />
               ))}
             </div>
-            <CartCheckout totalItems={totalItems} totalPrice={totalPrice} />
+            <CartCheckout
+              totalItems={totalItems}
+              totalPrice={totalPrice}
+              onCheckout={handleCheckout}
+            />
           </div>
         )}
       </div>
+
+      <LoginPromptModal
+        open={showLoginPrompt}
+        onClose={() => setShowLoginPrompt(false)}
+        onLogin={() => (window.location.href = "/login")}
+        message="You need to be logged in to proceed to checkout."
+      />
     </div>
   );
 };
