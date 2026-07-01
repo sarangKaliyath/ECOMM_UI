@@ -10,19 +10,18 @@ import {
   Search,
 } from "lucide-react";
 import { useCartStore } from "@ecomm/cart";
-import { useAuthStore, useLogout } from "@ecomm/auth";
+import { useAuthStore } from "@ecomm/auth";
 import { useNavigate } from "@tanstack/react-router";
-import { useQueryClient } from "@tanstack/react-query";
+import { useSignOut } from "../../hooks";
 
 const Navbar = () => {
   const [profileOpen, setProfileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
 
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const logoutMutation = useLogout();
+  const { signOut, isPending: isSigningOut } = useSignOut();
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -42,12 +41,7 @@ const Navbar = () => {
   );
 
   const handleSignOut = () => {
-    logoutMutation.mutate(undefined, {
-      onSuccess: () => {
-        queryClient.removeQueries({ queryKey: ["cart"] });
-        useCartStore.getState().clearCart();
-      },
-    });
+    signOut();
     setProfileOpen(false);
   };
 
@@ -143,11 +137,11 @@ const Navbar = () => {
                     <div className="border-t border-gray-100">
                       <button
                         onClick={handleSignOut}
-                        disabled={logoutMutation.isPending}
+                        disabled={isSigningOut}
                         className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors cursor-pointer disabled:opacity-60"
                       >
                         <LogOut size={16} />
-                        {logoutMutation.isPending ? "Signing out…" : "Sign Out"}
+                        {isSigningOut ? "Signing out…" : "Sign Out"}
                       </button>
                     </div>
                   </>

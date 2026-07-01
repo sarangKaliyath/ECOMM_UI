@@ -7,6 +7,7 @@ import {
   clearCartApi,
 } from "./api";
 import { useAuthStore } from "@ecomm/auth";
+import { cartKeys } from "./cartKeys";
 
 type OnError = (error: unknown) => void;
 
@@ -36,7 +37,7 @@ export const useGetCartItems = (options?: { enabled?: boolean }) => {
   const authReady = useAuthStore((s) => s.authReady);
   const cartType = isAuthenticated ? "USER" : "GUEST";
   return useQuery({
-    queryKey: ["cart", cartType],
+    queryKey: cartKeys.byType(cartType),
     queryFn: () => getCartItemsApi().then((res) => res.data),
     enabled: authReady && (options?.enabled ?? true),
   });

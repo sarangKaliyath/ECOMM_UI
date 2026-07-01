@@ -3,16 +3,15 @@ import { rootRoute } from "./__root";
 import { AuthCard } from "@ecomm/ui";
 import { useLogin, useSignup, useAuthStore } from "@ecomm/auth";
 import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { mergeCartApi, useCartStore } from "@ecomm/cart";
+import { usePostAuth } from "../hooks";
 
 function LoginPage() {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
   const [mode, setMode] = useState<"login" | "signup">("login");
 
   const loginMutation = useLogin();
   const signupMutation = useSignup();
+  const postAuth = usePostAuth();
 
   const isPending = loginMutation.isPending || signupMutation.isPending;
   const activeError =
@@ -26,33 +25,14 @@ function LoginPage() {
     setMode(next);
   };
 
-  const mergeAndNavigate = async () => {
-    try {
-      const { data } = await mergeCartApi();
-      queryClient.setQueryData(["cart", "USER"], data);
-      useCartStore.getState().setItems(
-        data.cartItems.map((item) => ({
-          id: item.productId,
-          name: item.productName,
-          price: item.priceSnapshot,
-          quantity: item.quantity,
-          imageUrl: item.imageUrl,
-        })),
-      );
-    } catch {
-      // non-fatal: proceed even if merge fails
-    }
-    navigate({ to: "/" });
-  };
-
   const handleLogin = (email: string, password: string) => {
-    loginMutation.mutate({ email, password }, { onSuccess: mergeAndNavigate });
+    loginMutation.mutate({ email, password }, { onSuccess: postAuth });
   };
 
   const handleSignup = (name: string, email: string, password: string) => {
     signupMutation.mutate(
       { name, email, password },
-      { onSuccess: mergeAndNavigate },
+      { onSuccess: postAuth },
     );
   };
 
