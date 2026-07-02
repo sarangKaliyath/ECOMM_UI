@@ -119,7 +119,10 @@ const Navbar = () => {
                     </div>
 
                     <button
-                      onClick={() => setProfileOpen(false)}
+                      onClick={() => {
+                        setProfileOpen(false);
+                        navigate({ to: "/profile" });
+                      }}
                       className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
                     >
                       <UserCircle size={16} className="text-blue-600" />

@@ -1,4 +1,4 @@
-import { createRoute, redirect, useNavigate } from "@tanstack/react-router";
+import { createRoute, redirect } from "@tanstack/react-router";
 import { rootRoute } from "./__root";
 import { AuthCard } from "@ecomm/ui";
 import { useLogin, useSignup, useAuthStore } from "@ecomm/auth";
@@ -6,7 +6,6 @@ import { useState } from "react";
 import { usePostAuth } from "../hooks";
 
 function LoginPage() {
-  const navigate = useNavigate();
   const [mode, setMode] = useState<"login" | "signup">("login");
 
   const loginMutation = useLogin();

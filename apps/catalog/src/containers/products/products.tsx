@@ -32,7 +32,7 @@ const Products = ({ filters = {} }: { filters?: FilterParams }) => {
   const sortRef = useRef<HTMLDivElement>(null);
 
   const setItems = useCartStore((s) => s.setItems);
-  const { data: cartData } = useGetCartItems("GUEST");
+  const { data: cartData } = useGetCartItems();
 
   useEffect(() => {
     if (!cartData?.cartItems) return;

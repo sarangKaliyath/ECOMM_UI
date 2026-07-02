@@ -6,6 +6,7 @@ import { checkoutRoute } from "./routes/checkout";
 import { loginRoute } from "./routes/login";
 import { signupRoute } from "./routes/signup";
 import { oauthCallbackRoute } from "./routes/callback";
+import { profileRoute } from "./routes/profile";
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
@@ -14,6 +15,7 @@ const routeTree = rootRoute.addChildren([
   loginRoute,
   signupRoute,
   oauthCallbackRoute,
+  profileRoute,
 ]);
 
 export const router = createRouter({ routeTree });

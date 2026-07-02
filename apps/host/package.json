@@ -12,6 +12,7 @@
   "dependencies": {
     "@ecomm/auth": "workspace:*",
     "@ecomm/cart": "workspace:*",
+    "@ecomm/profile": "workspace:*",
     "@ecomm/ui": "workspace:*",
     "@module-federation/vite": "^1.15.5",
     "@tanstack/react-router": "^1.170.8",
