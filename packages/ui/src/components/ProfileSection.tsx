@@ -217,7 +217,18 @@ export default function ProfileSection() {
                 <div><span className="font-medium text-gray-500">Name:</span> {profile?.firstName} {profile?.lastName}</div>
                 <div><span className="font-medium text-gray-500">Phone:</span> {profile?.phoneNumber || "—"}</div>
                 <div><span className="font-medium text-gray-500">Date of birth:</span> {profile?.dateOfBirth ? profile.dateOfBirth.split("T")[0] : "—"}</div>
-                <div><span className="font-medium text-gray-500">Picture:</span> {profile?.profilePictureUrl || "—"}</div>
+                <div className="flex items-center gap-3">
+                  <span className="font-medium text-gray-500">Picture:</span>
+                  {profile?.profilePictureUrl ? (
+                    <img
+                      src={profile.profilePictureUrl}
+                      alt="Profile"
+                      className="h-14 w-14 rounded-full border border-gray-200 object-cover"
+                    />
+                  ) : (
+                    <span className="text-gray-500">—</span>
+                  )}
+                </div>
               </div>
             ) : (
               <div className="mt-4 space-y-3">
