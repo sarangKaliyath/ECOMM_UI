@@ -85,6 +85,10 @@ export default defineConfig(({ mode }) => {
             singleton: true,
           },
 
+          "@ecomm/navigation": {
+            singleton: true,
+          },
+
           "@tanstack/react-query": {
             singleton: true,
             requiredVersion: "^5.0.0",

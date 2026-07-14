@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useCartStore, useGetCartItems, useCartSync } from "@ecomm/cart";
 import type { CartItem } from "@ecomm/cart";
 import { useAuthStore } from "@ecomm/auth";
+import { useNavigationStore } from "@ecomm/navigation";
 import { LoginPromptModal } from "@ecomm/ui";
 import {
   CartCheckout,
@@ -58,7 +59,7 @@ const CartWallet = () => {
 
   const handleCheckout = () => {
     if (isAuthenticated) {
-      window.location.href = "/checkout";
+      useNavigationStore.getState().navigate("/checkout");
     } else {
       setShowLoginPrompt(true);
     }
@@ -94,7 +95,7 @@ const CartWallet = () => {
       <LoginPromptModal
         open={showLoginPrompt}
         onClose={() => setShowLoginPrompt(false)}
-        onLogin={() => (window.location.href = "/login")}
+        onLogin={() => useNavigationStore.getState().navigate("/login")}
         message="You need to be logged in to proceed to checkout."
       />
     </div>

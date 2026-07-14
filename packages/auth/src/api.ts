@@ -32,3 +32,6 @@ export const refreshTokenApi = (): Promise<RefreshResponse> =>
 
 export const logoutApi = (): Promise<void> =>
   authAxios.post("/auth/logout").then(() => undefined);
+
+export const logoutAllApi = (): Promise<void> =>
+  authAxios.post("/auth/logout-all").then(() => undefined);

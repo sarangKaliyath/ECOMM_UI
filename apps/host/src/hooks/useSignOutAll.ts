@@ -1,15 +1,15 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
-import { useLogout } from "@ecomm/auth";
+import { useLogoutAll } from "@ecomm/auth";
 import { useCartStore } from "@ecomm/cart";
 
-export function useSignOut() {
+export function useSignOutAll() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const logoutMutation = useLogout();
+  const logoutAllMutation = useLogoutAll();
 
-  const signOut = () => {
-    logoutMutation.mutate(undefined, {
+  const signOutAll = () => {
+    logoutAllMutation.mutate(undefined, {
       onSettled: () => {
         queryClient.clear();
         useCartStore.getState().clearCart();
@@ -18,5 +18,5 @@ export function useSignOut() {
     });
   };
 
-  return { signOut, isPending: logoutMutation.isPending };
+  return { signOutAll, isPending: logoutAllMutation.isPending };
 }

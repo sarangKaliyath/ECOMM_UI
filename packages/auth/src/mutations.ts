@@ -1,5 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
-import { loginApi, signupApi, logoutApi, refreshTokenApi } from "./api";
+import {
+  loginApi,
+  signupApi,
+  logoutApi,
+  logoutAllApi,
+  refreshTokenApi,
+} from "./api";
 import { useAuthStore } from "./store";
 
 export const useLogin = () => {
@@ -43,8 +49,24 @@ export const useLogout = () => {
   const clearAuth = useAuthStore((s) => s.clearAuth);
   return useMutation({
     mutationFn: async () => {
-      await logoutApi();
-      clearAuth();
+      try {
+        await logoutApi();
+      } finally {
+        clearAuth();
+      }
+    },
+  });
+};
+
+export const useLogoutAll = () => {
+  const clearAuth = useAuthStore((s) => s.clearAuth);
+  return useMutation({
+    mutationFn: async () => {
+      try {
+        await logoutAllApi();
+      } finally {
+        clearAuth();
+      }
     },
   });
 };

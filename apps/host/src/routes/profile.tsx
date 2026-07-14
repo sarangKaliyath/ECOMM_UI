@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { createRoute, redirect, useNavigate } from "@tanstack/react-router";
 import { rootRoute } from "./__root";
 import { ProfileSection } from "@ecomm/ui";
-import { useAuthStore } from "@ecomm/auth";
+import { useAuthStore, waitForAuthReady } from "@ecomm/auth";
 
 function ProfilePage() {
   const navigate = useNavigate();
@@ -20,7 +20,8 @@ function ProfilePage() {
 export const profileRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/profile",
-  beforeLoad: () => {
+  beforeLoad: async () => {
+    await waitForAuthReady();
     if (!useAuthStore.getState().isAuthenticated) {
       throw redirect({ to: "/" });
     }

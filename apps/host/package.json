@@ -12,6 +12,7 @@
   "dependencies": {
     "@ecomm/auth": "workspace:*",
     "@ecomm/cart": "workspace:*",
+    "@ecomm/navigation": "workspace:*",
     "@ecomm/profile": "workspace:*",
     "@ecomm/ui": "workspace:*",
     "@module-federation/vite": "^1.15.5",
