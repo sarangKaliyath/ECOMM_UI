@@ -46,11 +46,27 @@ export const sendVerificationApi = (
     .post("/verify/send", { email, verificationType })
     .then(() => undefined);
 
+export interface ConfirmVerificationResponse {
+  resetToken?: string;
+}
+
 export const confirmVerificationApi = (
   email: string,
   code: string,
   verificationType: VerificationType,
+): Promise<ConfirmVerificationResponse> =>
+  authAxios
+    .post<ConfirmVerificationResponse>("/verify/confirm", {
+      email,
+      code,
+      verificationType,
+    })
+    .then((r) => r.data ?? {});
+
+export const resetPasswordApi = (
+  resetToken: string,
+  newPassword: string,
 ): Promise<void> =>
   authAxios
-    .post("/verify/confirm", { email, code, verificationType })
+    .post("/auth/reset-password", { resetToken, newPassword })
     .then(() => undefined);

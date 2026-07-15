@@ -6,6 +6,7 @@ export {
   useLogoutAll,
   useSendVerification,
   useConfirmVerification,
+  useResetPassword,
 } from "./mutations";
 export { useTokenRefresh } from "./useTokenRefresh";
 export { useBootstrapSession } from "./useBootstrapSession";
@@ -22,5 +23,11 @@ export {
   logoutAllApi,
   sendVerificationApi,
   confirmVerificationApi,
+  resetPasswordApi,
 } from "./api";
-export type { SignupResponse, RefreshResponse, VerificationType } from "./api";
+export type {
+  SignupResponse,
+  RefreshResponse,
+  VerificationType,
+  ConfirmVerificationResponse,
+} from "./api";

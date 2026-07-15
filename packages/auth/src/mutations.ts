@@ -7,6 +7,7 @@ import {
   refreshTokenApi,
   sendVerificationApi,
   confirmVerificationApi,
+  resetPasswordApi,
   type VerificationType,
 } from "./api";
 import { useAuthStore } from "./store";
@@ -67,6 +68,17 @@ export const useConfirmVerification = () =>
       code: string;
       verificationType: VerificationType;
     }) => confirmVerificationApi(email, code, verificationType),
+  });
+
+export const useResetPassword = () =>
+  useMutation({
+    mutationFn: ({
+      resetToken,
+      newPassword,
+    }: {
+      resetToken: string;
+      newPassword: string;
+    }) => resetPasswordApi(resetToken, newPassword),
   });
 
 export const useLogout = () => {
