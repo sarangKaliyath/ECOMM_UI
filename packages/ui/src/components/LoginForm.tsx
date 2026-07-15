@@ -6,9 +6,10 @@ interface Props {
   isLoading?: boolean;
   error?: string;
   onGoogleLogin?: () => void;
+  onForgotPassword?: () => void;
 }
 
-export default function LoginForm({ onSubmit, isLoading, error, onGoogleLogin }: Props) {
+export default function LoginForm({ onSubmit, isLoading, error, onGoogleLogin, onForgotPassword }: Props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -45,7 +46,18 @@ export default function LoginForm({ onSubmit, isLoading, error, onGoogleLogin }:
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label className="text-sm font-medium text-gray-700">Password</label>
+        <div className="flex items-center justify-between">
+          <label className="text-sm font-medium text-gray-700">Password</label>
+          {onForgotPassword && (
+            <button
+              type="button"
+              onClick={onForgotPassword}
+              className="text-xs text-blue-600 hover:text-blue-700"
+            >
+              Forgot password?
+            </button>
+          )}
+        </div>
         <div className="relative">
           <Lock
             size={16}

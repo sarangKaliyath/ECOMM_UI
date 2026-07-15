@@ -5,6 +5,7 @@ import { cartRoute } from "./routes/cart";
 import { checkoutRoute } from "./routes/checkout";
 import { loginRoute } from "./routes/login";
 import { signupRoute } from "./routes/signup";
+import { forgotPasswordRoute } from "./routes/forgot-password";
 import { oauthCallbackRoute } from "./routes/callback";
 import { profileRoute } from "./routes/profile";
 
@@ -14,6 +15,7 @@ const routeTree = rootRoute.addChildren([
   checkoutRoute,
   loginRoute,
   signupRoute,
+  forgotPasswordRoute,
   oauthCallbackRoute,
   profileRoute,
 ]);

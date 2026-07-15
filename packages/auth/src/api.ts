@@ -35,3 +35,22 @@ export const logoutApi = (): Promise<void> =>
 
 export const logoutAllApi = (): Promise<void> =>
   authAxios.post("/auth/logout-all").then(() => undefined);
+
+export type VerificationType = "LOGIN" | "PASSWORD_RESET" | "EMAIL_VERIFICATION";
+
+export const sendVerificationApi = (
+  email: string,
+  verificationType: VerificationType,
+): Promise<void> =>
+  authAxios
+    .post("/verify/send", { email, verificationType })
+    .then(() => undefined);
+
+export const confirmVerificationApi = (
+  email: string,
+  code: string,
+  verificationType: VerificationType,
+): Promise<void> =>
+  authAxios
+    .post("/verify/confirm", { email, code, verificationType })
+    .then(() => undefined);

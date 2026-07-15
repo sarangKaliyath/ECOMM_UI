@@ -11,6 +11,7 @@ interface Props {
   isLoading?: boolean;
   error?: string;
   onGoogleLogin?: () => void;
+  onForgotPassword?: () => void;
 }
 
 export default function AuthCard({
@@ -21,6 +22,7 @@ export default function AuthCard({
   isLoading,
   error,
   onGoogleLogin,
+  onForgotPassword,
 }: Props) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
@@ -55,6 +57,7 @@ export default function AuthCard({
               isLoading={isLoading}
               error={error}
               onGoogleLogin={onGoogleLogin}
+              onForgotPassword={onForgotPassword}
             />
           ) : (
             <SignupForm

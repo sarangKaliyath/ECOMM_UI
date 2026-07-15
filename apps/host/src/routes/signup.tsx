@@ -1,59 +1,45 @@
 import { createRoute, useNavigate } from "@tanstack/react-router";
 import { rootRoute } from "./__root";
-import { AuthCard } from "@ecomm/ui";
-import { useLogin, useSignup, useAuthStore } from "@ecomm/auth";
-import { useState, useEffect } from "react";
-import { usePostAuth } from "../hooks";
+import { AuthCard, VerifyCodeCard } from "@ecomm/ui";
+import { useAuthStore } from "@ecomm/auth";
+import { useEffect } from "react";
+import { useAuthPageState } from "../hooks";
 
 function SignupPage() {
   const navigate = useNavigate();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
-  const [mode, setMode] = useState<"login" | "signup">("signup");
-
-  const loginMutation = useLogin();
-  const signupMutation = useSignup();
-  const postAuth = usePostAuth();
+  const state = useAuthPageState("signup");
 
   useEffect(() => {
     if (isAuthenticated) navigate({ to: "/" });
   }, [isAuthenticated]);
 
-  const isPending = loginMutation.isPending || signupMutation.isPending;
-  const activeError =
-    mode === "login" ? loginMutation.error : signupMutation.error;
-  const errorMessage =
-    activeError instanceof Error ? activeError.message : undefined;
-
-  const handleModeChange = (next: "login" | "signup") => {
-    loginMutation.reset();
-    signupMutation.reset();
-    setMode(next);
-  };
-
-  const handleLogin = (email: string, password: string) => {
-    loginMutation.mutate({ email, password }, { onSuccess: postAuth });
-  };
-
-  const handleSignup = (name: string, email: string, password: string) => {
-    signupMutation.mutate(
-      { name, email, password },
-      { onSuccess: postAuth },
+  if (state.step === "verify" && state.pending) {
+    return (
+      <VerifyCodeCard
+        email={state.pending.email}
+        title="Verify your email"
+        onSubmit={state.handleVerify}
+        onResend={state.handleResend}
+        onBack={state.handleBackToCredentials}
+        isLoading={state.verify.isLoading}
+        isResending={state.verify.isResending}
+        error={state.verify.error}
+        locked={state.verify.locked}
+      />
     );
-  };
-
-  const handleGoogleLogin = () => {
-    window.location.href = import.meta.env.VITE_GOOGLE_OAUTH_URL as string;
-  };
+  }
 
   return (
     <AuthCard
-      mode={mode}
-      onModeChange={handleModeChange}
-      onLogin={handleLogin}
-      onSignup={handleSignup}
-      isLoading={isPending}
-      error={errorMessage}
-      onGoogleLogin={import.meta.env.VITE_GOOGLE_OAUTH_URL ? handleGoogleLogin : undefined}
+      mode={state.mode}
+      onModeChange={state.handleModeChange}
+      onLogin={state.handleLogin}
+      onSignup={state.handleSignup}
+      isLoading={state.isPending}
+      error={state.errorMessage}
+      onGoogleLogin={import.meta.env.VITE_GOOGLE_OAUTH_URL ? state.handleGoogleLogin : undefined}
+      onForgotPassword={() => navigate({ to: "/forgot-password" })}
     />
   );
 }

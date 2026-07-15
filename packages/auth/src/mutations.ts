@@ -5,6 +5,9 @@ import {
   logoutApi,
   logoutAllApi,
   refreshTokenApi,
+  sendVerificationApi,
+  confirmVerificationApi,
+  type VerificationType,
 } from "./api";
 import { useAuthStore } from "./store";
 
@@ -26,7 +29,6 @@ export const useLogin = () => {
 };
 
 export const useSignup = () => {
-  const setAuth = useAuthStore((s) => s.setAuth);
   return useMutation({
     mutationFn: async ({
       name,
@@ -38,12 +40,34 @@ export const useSignup = () => {
       password: string;
     }) => {
       await signupApi(name, email, password);
-      await loginApi(email, password);
-      const { accessToken, expiresIn } = await refreshTokenApi();
-      setAuth(accessToken, expiresIn);
+      await sendVerificationApi(email, "EMAIL_VERIFICATION");
     },
   });
 };
+
+export const useSendVerification = () =>
+  useMutation({
+    mutationFn: ({
+      email,
+      verificationType,
+    }: {
+      email: string;
+      verificationType: VerificationType;
+    }) => sendVerificationApi(email, verificationType),
+  });
+
+export const useConfirmVerification = () =>
+  useMutation({
+    mutationFn: ({
+      email,
+      code,
+      verificationType,
+    }: {
+      email: string;
+      code: string;
+      verificationType: VerificationType;
+    }) => confirmVerificationApi(email, code, verificationType),
+  });
 
 export const useLogout = () => {
   const clearAuth = useAuthStore((s) => s.clearAuth);

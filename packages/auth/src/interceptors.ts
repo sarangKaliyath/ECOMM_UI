@@ -14,6 +14,8 @@ const SKIP_REFRESH_PATHS = [
   "/auth/signup",
   "/auth/logout",
   "/auth/logout-all",
+  "/verify/send",
+  "/verify/confirm",
 ];
 
 function isSkipped(url?: string): boolean {
