@@ -1,4 +1,3 @@
-import { ShieldCheck } from "lucide-react";
 import { useGetCartItems } from "@ecomm/cart";
 import type { CartResponseDto } from "@ecomm/cart";
 import { OrderItem } from "../../common";
@@ -8,11 +7,7 @@ import { TAX_RATE, SHIPPING_FLAT_RATE } from "../../constants";
 const formatPrice = (amount: number, currency = "USD") =>
   new Intl.NumberFormat("en-US", { style: "currency", currency }).format(amount);
 
-interface Props {
-  onPlaceOrder: () => void;
-}
-
-const OrderSummary = ({ onPlaceOrder }: Props) => {
+const OrderSummary = () => {
   const { data, isLoading, isError, refetch } = useGetCartItems();
   const cart = data as CartResponseDto | undefined;
 
@@ -74,19 +69,6 @@ const OrderSummary = ({ onPlaceOrder }: Props) => {
           </div>
         </>
       )}
-
-      <button
-        onClick={onPlaceOrder}
-        disabled={isLoading || isError || isEmpty}
-        className="w-full py-2.5 rounded-xl bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        Place Order
-      </button>
-
-      <div className="flex items-center justify-center gap-1.5 text-xs text-gray-400">
-        <ShieldCheck size={13} />
-        Secure checkout
-      </div>
     </div>
   );
 };

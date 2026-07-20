@@ -29,7 +29,7 @@ function App() {
             </div>
 
             <div className="lg:col-span-1">
-              <OrderSummary onPlaceOrder={handleProceedToPay} />
+              <OrderSummary />
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { CreditCard } from "lucide-react";
+import { CreditCard, ShieldCheck } from "lucide-react";
 
 interface Props {
   onProceed: () => void;
@@ -22,6 +22,11 @@ const ProceedToPay = ({ onProceed }: Props) => {
       >
         Proceed to Pay
       </button>
+
+      <div className="flex items-center justify-center gap-1.5 text-xs text-gray-400">
+        <ShieldCheck size={13} />
+        Secure checkout
+      </div>
     </div>
   );
 };
