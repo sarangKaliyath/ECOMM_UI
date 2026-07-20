@@ -206,6 +206,9 @@ importers:
       '@ecomm/cart':
         specifier: workspace:*
         version: link:../../packages/cart
+      '@ecomm/orders':
+        specifier: workspace:*
+        version: link:../../packages/orders
       '@ecomm/profile':
         specifier: workspace:*
         version: link:../../packages/profile
@@ -397,6 +400,18 @@ importers:
       typescript:
         specifier: ~6.0.3
         version: 6.0.3
+
+  packages/orders:
+    dependencies:
+      '@ecomm/auth':
+        specifier: workspace:*
+        version: link:../auth
+      '@tanstack/react-query':
+        specifier: ^5.0.0
+        version: 5.100.14(react@19.2.6)
+      axios:
+        specifier: ^1.18.1
+        version: 1.18.1
 
   packages/profile:
     dependencies:

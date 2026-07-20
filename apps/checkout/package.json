@@ -12,6 +12,7 @@
   "dependencies": {
     "@ecomm/auth": "workspace:*",
     "@ecomm/cart": "workspace:*",
+    "@ecomm/orders": "workspace:*",
     "@ecomm/profile": "workspace:*",
     "@ecomm/ui": "workspace:*",
     "@tanstack/react-query": "^5.0.0",

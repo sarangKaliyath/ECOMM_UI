@@ -1,20 +1,24 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { MapPin } from "lucide-react";
 import { useGetMyAddresses } from "@ecomm/profile";
 import { getAuthErrorMessage } from "@ecomm/auth";
 import { toast } from "@ecomm/ui";
 import AddressCard from "./AddressCard";
 
-const ShippingAddress = () => {
+interface Props {
+  selectedId: number | null;
+  onSelect: (id: number) => void;
+}
+
+const ShippingAddress = ({ selectedId, onSelect }: Props) => {
   const { data: addresses, isLoading, isError, error, refetch } = useGetMyAddresses();
-  const [selectedId, setSelectedId] = useState<number | null>(null);
   const toastedError = useRef(false);
 
   useEffect(() => {
     if (!addresses || addresses.length === 0 || selectedId !== null) return;
     const defaultAddress = addresses.find((a) => a.isDefault) ?? addresses[0];
-    setSelectedId(defaultAddress.id);
-  }, [addresses, selectedId]);
+    onSelect(defaultAddress.id);
+  }, [addresses, selectedId, onSelect]);
 
   useEffect(() => {
     if (isError && !toastedError.current) {
@@ -61,7 +65,7 @@ const ShippingAddress = () => {
               key={address.id}
               address={address}
               selected={selectedId === address.id}
-              onSelect={() => setSelectedId(address.id)}
+              onSelect={() => onSelect(address.id)}
             />
           ))}
         </div>

@@ -12,7 +12,7 @@ const OrderSummary = () => {
   const cart = data as CartResponseDto | undefined;
 
   const items: OrderItemType[] =
-    cart?.cartItems.map((item) => ({
+    cart?.cartItems?.map((item) => ({
       id: item.productId,
       name: item.productName,
       price: item.priceSnapshot,

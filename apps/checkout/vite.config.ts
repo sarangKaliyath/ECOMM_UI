@@ -31,6 +31,9 @@ export default defineConfig({
         "@ecomm/auth": {
           singleton: true,
         },
+        "@ecomm/orders": {
+          singleton: true,
+        },
         "@tanstack/react-query": {
           singleton: true,
           requiredVersion: "^5.0.0",
