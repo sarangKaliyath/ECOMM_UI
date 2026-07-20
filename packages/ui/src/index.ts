@@ -7,3 +7,5 @@ export { default as ProfileSection } from "./components/ProfileSection";
 export { default as VerifyCodeCard } from "./components/VerifyCodeCard";
 export { default as ForgotPasswordCard } from "./components/ForgotPasswordCard";
 export { default as ResetPasswordCard } from "./components/ResetPasswordCard";
+export { default as Toaster } from "./components/Toaster";
+export { toast } from "sonner";

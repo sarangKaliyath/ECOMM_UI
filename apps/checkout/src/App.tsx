@@ -1,5 +1,5 @@
 import './App.css'
-import { ErrorBoundary, LoginPromptModal } from "@ecomm/ui";
+import { ErrorBoundary, LoginPromptModal, Toaster } from "@ecomm/ui";
 import { useAuthStore } from "@ecomm/auth";
 import { ShippingAddress, ProceedToPay, OrderSummary } from "./containers";
 
@@ -39,6 +39,7 @@ function App() {
           onLogin={handleLogin}
           message="You need to be logged in to continue with checkout."
         />
+        <Toaster />
       </div>
     </ErrorBoundary>
   );
