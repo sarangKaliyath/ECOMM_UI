@@ -8,6 +8,7 @@ import {
   ChevronDown,
   UserCircle,
   Search,
+  PackageSearch,
 } from "lucide-react";
 import { useCartStore } from "@ecomm/cart";
 import { useAuthStore } from "@ecomm/auth";
@@ -127,6 +128,17 @@ const Navbar = () => {
                     >
                       <UserCircle size={16} className="text-blue-600" />
                       My Profile
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setProfileOpen(false);
+                        navigate({ to: "/orders" });
+                      }}
+                      className="flex items-center gap-3 w-full px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors cursor-pointer"
+                    >
+                      <PackageSearch size={16} className="text-blue-600" />
+                      Order History
                     </button>
 
                     <button

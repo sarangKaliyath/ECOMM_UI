@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@ecomm/profile": "workspace:*",
+    "@ecomm/orders": "workspace:*",
     "sonner": "^2.0.0"
   },
   "devDependencies": {

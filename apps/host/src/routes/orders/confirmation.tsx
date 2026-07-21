@@ -51,6 +51,14 @@ function OrderConfirmationPage() {
     return () => clearTimeout(timer);
   }, [referenceId]);
 
+  useEffect(() => {
+    if (!referenceId || isLoading) return;
+    const redirectTimer = setTimeout(() => {
+      navigate({ to: "/orders" });
+    }, 2000);
+    return () => clearTimeout(redirectTimer);
+  }, [referenceId, isLoading, navigate]);
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4 py-8">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden px-8 py-8 flex flex-col items-center text-center gap-4">
@@ -92,6 +100,7 @@ function OrderConfirmationPage() {
                 </div>
               </div>
             )}
+            <p className="text-xs text-gray-400">Redirecting you to your orders…</p>
           </>
         ) : (
           <>
@@ -101,6 +110,7 @@ function OrderConfirmationPage() {
               Order <span className="font-semibold text-gray-700">{order?.orderNumber}</span> was created but
               payment wasn't completed. You can retry payment from your orders page.
             </p>
+            <p className="text-xs text-gray-400">Redirecting you to your orders…</p>
           </>
         )}
 

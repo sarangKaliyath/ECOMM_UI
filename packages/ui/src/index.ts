@@ -4,6 +4,7 @@ export { default as SignupForm } from "./components/SignupForm";
 export { default as AuthCard } from "./components/AuthCard";
 export { default as LoginPromptModal } from "./components/LoginPromptModal";
 export { default as ProfileSection } from "./components/ProfileSection";
+export { default as OrderHistorySection } from "./components/OrderHistorySection";
 export { default as VerifyCodeCard } from "./components/VerifyCodeCard";
 export { default as ForgotPasswordCard } from "./components/ForgotPasswordCard";
 export { default as ResetPasswordCard } from "./components/ResetPasswordCard";

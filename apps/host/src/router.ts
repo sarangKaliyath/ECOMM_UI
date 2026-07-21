@@ -9,6 +9,7 @@ import { forgotPasswordRoute } from "./routes/forgot-password";
 import { oauthCallbackRoute } from "./routes/callback";
 import { profileRoute } from "./routes/profile";
 import { orderConfirmationRoute } from "./routes/orders/confirmation";
+import { orderHistoryRoute } from "./routes/orders/history";
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
@@ -20,6 +21,7 @@ const routeTree = rootRoute.addChildren([
   oauthCallbackRoute,
   profileRoute,
   orderConfirmationRoute,
+  orderHistoryRoute,
 ]);
 
 export const router = createRouter({ routeTree });

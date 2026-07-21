@@ -282,6 +282,9 @@ importers:
       '@ecomm/navigation':
         specifier: workspace:*
         version: link:../../packages/navigation
+      '@ecomm/orders':
+        specifier: workspace:*
+        version: link:../../packages/orders
       '@ecomm/profile':
         specifier: workspace:*
         version: link:../../packages/profile
@@ -427,6 +430,9 @@ importers:
 
   packages/ui:
     dependencies:
+      '@ecomm/orders':
+        specifier: workspace:*
+        version: link:../orders
       '@ecomm/profile':
         specifier: workspace:*
         version: link:../profile
