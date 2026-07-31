@@ -16,7 +16,7 @@ This is the browser-facing layer of the ECOMM platform. It talks directly to the
 | [Payment Service](https://github.com/sarangKaliyath/ECOMM_Payment_Gateway_Service_Application) | Payment processing |
 | [Email Service](https://github.com/sarangKaliyath/ECOMM_Email_Service_Application) | Transactional email delivery |
 | [Service Discovery](https://github.com/sarangKaliyath/ECOMM_Service_Discovery_Application) | Eureka registry |
-| **Frontend** *(this repo)* | Browser UI — this micro-frontend monorepo |
+| **Frontend** [*(this repo)*](https://github.com/sarangKaliyath/ECOMM_UI) | Browser UI — this micro-frontend monorepo |
 
 ## Monorepo structure
 
