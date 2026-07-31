@@ -29,10 +29,9 @@ function OrderCard({ order }: { order: OrderSummaryResponse }) {
 
   const handlePayNow = async () => {
     setPayError(null);
-    if (order.paymentUrl) {
-      window.open(order.paymentUrl, "_blank", "noopener,noreferrer");
-      return;
-    }
+    // Always fetch a fresh payment link rather than reopening order.paymentUrl:
+    // Razorpay links expire a short time after creation, and the stored URL
+    // is never cleared, so it goes stale on any order left pending a while.
     try {
       const updated = await retryPayment.mutateAsync(order.orderNumber);
       if (updated.paymentUrl) {
