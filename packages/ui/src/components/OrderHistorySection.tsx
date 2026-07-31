@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Package, CreditCard } from "lucide-react";
 import { useMyOrders, useMyPendingOrders, useRetryPayment, type OrderSummaryResponse } from "@ecomm/orders";
 
 const PAGE_SIZE = 10;
@@ -16,11 +17,25 @@ const orderStatusStyles: Record<string, string> = {
   REFUNDED: "bg-blue-100 text-blue-700",
 };
 
+const orderStatusLabels: Record<string, string> = {
+  PENDING: "Order Pending",
+  CONFIRMED: "Order Confirmed",
+  CANCELLED: "Order Cancelled",
+  REFUNDED: "Order Refunded",
+};
+
 const paymentStatusStyles: Record<string, string> = {
-  PENDING: "bg-amber-100 text-amber-700",
-  PAID: "bg-emerald-100 text-emerald-700",
-  FAILED: "bg-red-100 text-red-700",
-  REFUNDED: "bg-blue-100 text-blue-700",
+  PENDING: "bg-amber-50 text-amber-800 ring-1 ring-inset ring-amber-300",
+  PAID: "bg-teal-50 text-teal-700 ring-1 ring-inset ring-teal-300",
+  FAILED: "bg-red-50 text-red-700 ring-1 ring-inset ring-red-300",
+  REFUNDED: "bg-indigo-50 text-indigo-700 ring-1 ring-inset ring-indigo-300",
+};
+
+const paymentStatusLabels: Record<string, string> = {
+  PENDING: "Payment Pending",
+  PAID: "Payment Paid",
+  FAILED: "Payment Failed",
+  REFUNDED: "Payment Refunded",
 };
 
 function OrderCard({ order }: { order: OrderSummaryResponse }) {
@@ -52,11 +67,17 @@ function OrderCard({ order }: { order: OrderSummaryResponse }) {
           <p className="text-xs text-gray-500">{formatDate(order.createdAt)}</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <span className={`rounded-full px-3 py-1 text-xs font-medium ${orderStatusStyles[order.orderStatus] ?? "bg-gray-100 text-gray-600"}`}>
-            {order.orderStatus}
+          <span
+            className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium ${orderStatusStyles[order.orderStatus] ?? "bg-gray-100 text-gray-600"}`}
+          >
+            <Package className="h-3 w-3" aria-hidden="true" />
+            {orderStatusLabels[order.orderStatus] ?? order.orderStatus}
           </span>
-          <span className={`rounded-full px-3 py-1 text-xs font-medium ${paymentStatusStyles[order.paymentStatus] ?? "bg-gray-100 text-gray-600"}`}>
-            {order.paymentStatus}
+          <span
+            className={`inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium ${paymentStatusStyles[order.paymentStatus] ?? "bg-gray-100 text-gray-600"}`}
+          >
+            <CreditCard className="h-3 w-3" aria-hidden="true" />
+            {paymentStatusLabels[order.paymentStatus] ?? order.paymentStatus}
           </span>
         </div>
       </div>
