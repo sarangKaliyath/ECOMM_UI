@@ -22,6 +22,22 @@ export default defineConfig({
         "react-dom": {
           singleton: true,
         },
+        zustand: {
+          singleton: true,
+        },
+        "@ecomm/cart": {
+          singleton: true,
+        },
+        "@ecomm/auth": {
+          singleton: true,
+        },
+        "@ecomm/orders": {
+          singleton: true,
+        },
+        "@tanstack/react-query": {
+          singleton: true,
+          requiredVersion: "^5.0.0",
+        },
       },
     }),
   ],
@@ -34,6 +50,12 @@ export default defineConfig({
   server: {
     port: 3002,
     origin: "http://localhost:3002",
+    cors: true,
+    hmr: {
+      protocol: "ws",
+      host: "localhost",
+      port: 3002,
+    },
   },
 
   preview: {

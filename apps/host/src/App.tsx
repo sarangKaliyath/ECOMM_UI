@@ -1,41 +1,32 @@
-import './App.css'
+import "./App.css";
+import { useEffect, useState } from "react";
+import { RouterProvider } from "@tanstack/react-router";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { router } from "./router";
+import { useTokenRefresh, useBootstrapSession, waitForAuthReady } from "@ecomm/auth";
+import { useNavigationStore } from "@ecomm/navigation";
 
-import React, { Suspense } from "react";
+const queryClient = new QueryClient();
 
-const CatalogApp = React.lazy(
-  () => import("catalog/CatalogApp")
-);
+useNavigationStore.getState().setNavigate((path) => router.navigate({ to: path as any }));
 
-const CheckoutApp = React.lazy(
-  () => import("checkout/CheckoutApp")
-)
+function AuthInitializer() {
+  useBootstrapSession();
+  useTokenRefresh();
 
-const CartApp = React.lazy(
-  () => import("cart/CartApp")
-)
+  const [authReady, setAuthReady] = useState(false);
+  useEffect(() => {
+    waitForAuthReady().then(() => setAuthReady(true));
+  }, []);
 
-function App() {
-  return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="bg-black px-6 py-4 text-white">
-        <h1 className="text-3xl font-bold">
-          Host Application
-        </h1>
-      </div>
-
-      <div className='flex column'>
-        <Suspense fallback={<div>Loading Catalog...</div>}>
-        <CatalogApp />
-      </Suspense>
-      <Suspense fallback={<div>Loading Checkout...</div>}>
-        <CheckoutApp />
-      </Suspense>
-      <Suspense fallback={<div>Loading Checkout...</div>}>
-        <CartApp/>
-      </Suspense>
-      </div>
-    </div>
-  );
+  if (!authReady) return null;
+  return <RouterProvider router={router} />;
 }
 
-export default App;
+export default function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthInitializer />
+    </QueryClientProvider>
+  );
+}
